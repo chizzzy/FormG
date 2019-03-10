@@ -1,0 +1,15 @@
+.welcome-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+}
+.title {
+  font-size: 60px;
+}
+.create-form-button {
+  margin-top: 30px;
+  width: 250px;
+  height: 60px;
+}
