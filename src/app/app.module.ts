@@ -4,16 +4,24 @@ import {AppComponent} from './app.component';
 import {WelcomePageComponent} from './welcome-page/welcome-page.component';
 import {AppRoutingModule} from './app-routing.module';
 import {FormsPageComponent} from './forms-page/forms-page.component';
+import { ContentTabComponent } from './content-tab/content-tab.component';
+import {SharedModule} from './shared/shared.module';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     WelcomePageComponent,
-    FormsPageComponent
+    FormsPageComponent,
+    ContentTabComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    SharedModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

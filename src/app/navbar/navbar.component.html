@@ -1,0 +1,14 @@
+<nav>
+  <h1 class="title">FormG</h1>
+  <div class="language">
+    <mat-form-field>
+      <mat-select placeholder="Favorite food" [(ngModel)]="selectedValue" name="food">
+        <mat-option *ngFor="let food of foods" [value]="food.value">
+          {{food.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+</nav>
+
