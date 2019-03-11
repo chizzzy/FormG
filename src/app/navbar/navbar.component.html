@@ -1,14 +1,15 @@
-<nav>
-  <h1 class="title">FormG</h1>
+<nav class="navbar">
+  <div class="navbar-content">
+  <img routerLink="/" class="image" src="../../assets/images/logo_transparent.png" alt="logo">
   <div class="language">
     <mat-form-field>
-      <mat-select placeholder="Favorite food" [(ngModel)]="selectedValue" name="food">
-        <mat-option *ngFor="let food of foods" [value]="food.value">
-          {{food.viewValue}}
+      <mat-select placeholder="Language" [(ngModel)]="selectedValue" name="food">
+        <mat-option *ngFor="let language of languages" [value]="language.value">
+          {{language.viewValue}}
         </mat-option>
       </mat-select>
     </mat-form-field>
   </div>
-
+  </div>
 </nav>
 

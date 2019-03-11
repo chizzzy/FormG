@@ -1,11 +1,11 @@
-
+@import "../../assets/variables";
 .welcome-page {
   display: flex;
   height: 100vh;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background-color: #213458;
+  background-color: $darkblue;
 }
 .logo {
   background: url("../../assets/images/linkedin_banner_image_1.png") top no-repeat;
@@ -23,7 +23,7 @@
 }
 .button-text {
   font-size: 22px;
-  color: #213458;
+  color: $darkblue;
   font-weight: 700;
 }
 .description {

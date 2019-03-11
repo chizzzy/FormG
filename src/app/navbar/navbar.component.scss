@@ -1,3 +1,44 @@
+@import "../../assets/variables";
 button {
   background-color: white;
+}
+.mat-select-arrow {
+  color: #fff;
+}
+.mat-select-placeholder .ng-tns-c5-1 .ng-star-inserted {
+  color: #fff;
+}
+.mat-select-value-text {
+  color: #fff;
+}
+
+.mat-form-field-infix {
+  color: #fff;
+}
+.mat-form-field-appearance-legacy .mat-form-field-underline {
+  background-color: #fff;
+}
+.mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+  color: #fff;
+}
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: $darkblue;
+}
+.image {
+  width: 160px;
+  height: 157px;
+  cursor: pointer;
+}
+.navbar {
+  background-color: $darkblue;
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+}
+.navbar-content {
+  height: 100%;
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
