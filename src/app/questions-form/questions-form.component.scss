@@ -21,6 +21,7 @@
   font-size: 30px;
 }
 .title-inputs {
+  border-top: 3px solid $darkblue;
   margin-top:20px;
   display: flex;
   flex-direction: column;
@@ -28,10 +29,6 @@
   align-items: center;
   background-color: #F3F3F3;
   width: 80%;
-}
-textarea
-{
-  resize: none;
 }
 textarea, input {
   border: 0.2px solid transparent;
@@ -41,7 +38,6 @@ textarea:focus, input:focus {
   border: 0.5px solid $darkblue
 }
 textarea:hover, input:hover{
-
   border: 0.2px solid #d1d1d1;
 }
 .description {

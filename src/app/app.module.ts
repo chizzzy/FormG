@@ -8,7 +8,8 @@ import { ContentTabComponent } from './content-tab/content-tab.component';
 import {SharedModule} from './shared/shared.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { NavbarComponent } from './navbar/navbar.component';
-import { QuestionsComponent } from './questions/questions.component';
+import { QuestionsFormComponent } from './questions-form/questions-form.component';
+import { QuestionComponent } from './question/question.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { QuestionsComponent } from './questions/questions.component';
     FormsPageComponent,
     ContentTabComponent,
     NavbarComponent,
-    QuestionsComponent,
+    QuestionsFormComponent,
+    QuestionComponent,
   ],
   imports: [
     BrowserModule,
