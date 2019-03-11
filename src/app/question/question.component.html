@@ -4,9 +4,9 @@
     <ul class="options">
       <li *ngFor="let option of options" >
         <input class="option" placeholder="Enter option">
+        <img class="delete-icon" src="../../assets/icons/garbage.svg" alt="garbage">
       </li>
     </ul>
     <button (click)="addOption()" mat-raised-button color="primary">Add option</button>
-
   </div>
 </section>

@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-question',
@@ -13,5 +14,7 @@ export class QuestionComponent implements OnInit {
   }
   addOption() {
     this.options.push(1);
+  }
+  deleteOption() {
   }
 }
