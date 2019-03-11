@@ -2,25 +2,30 @@
 button {
   background-color: white;
 }
+//works
 .mat-select-arrow {
   color: #fff;
+}
+//works
+.mat-select-value-text {
+  color: #fff;
+}
+//Works
+.mat-form-field.mat-focused .mat-form-field-ripple {
+  background-color: #fff;
 }
 .mat-select-placeholder .ng-tns-c5-1 .ng-star-inserted {
   color: #fff;
 }
-.mat-select-value-text {
-  color: #fff;
-}
-
-.mat-form-field-infix {
-  color: #fff;
-}
+//works
 .mat-form-field-appearance-legacy .mat-form-field-underline {
   background-color: #fff;
 }
+//works
 .mat-form-field.mat-focused.mat-primary .mat-select-arrow {
   color: #fff;
 }
+//works
 .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
   color: $darkblue;
 }
