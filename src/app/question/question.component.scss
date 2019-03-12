@@ -11,6 +11,8 @@ textarea:hover, input:hover{
 }
 
 .question-new {
+  display: flex;
+  flex-direction: column;
   margin-top: 15px;
   width:63.8vw;
   height: auto;
@@ -55,5 +57,13 @@ textarea:hover, input:hover{
 .delete-icon {
   height: 20px;
   width: 20px;
-  margin-left: 10px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.panel {
+  height: 3vw;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }

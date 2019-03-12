@@ -4,10 +4,9 @@
       <input placeholder="Enter your title" class="title">
       <input placeholder="Enter your description" class="description">
     </div>
-  <p *ngFor="let question of questions">
-    <app-question></app-question>
-  </p>
+    <p *ngFor="let question of questions">
+      <app-question (deletedElement)="deleteQuestion(question, questions)"></app-question>
+    </p>
     <button (click)="addQuestion()" mat-raised-button color="primary">Add question</button>
   </div>
-
 </section>

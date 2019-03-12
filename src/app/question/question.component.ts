@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {QuestionService} from '../question.service';
 
 @Component({
   selector: 'app-question',
@@ -7,14 +7,26 @@ import {FormControl} from '@angular/forms';
   styleUrls: ['./question.component.scss']
 })
 export class QuestionComponent implements OnInit {
-  public options = [1];
-  constructor() { }
+  public options = [];
+  @Output() deletedElement = new EventEmitter();
+
+  constructor(private questionService: QuestionService) {
+  }
 
   ngOnInit() {
   }
+
   addOption() {
-    this.options.push(1);
+    const currentOption = this.questionService.addElement(this.options);
+    this.options.push(currentOption);
   }
-  deleteOption() {
+  deleteQuestion() {
+    this.deletedElement.emit();
   }
+
+  deleteOption(currentElement, options) {
+    this.options = this.questionService.deleteElement(currentElement, options);
+    return this.options;
+  }
+
 }

@@ -1,10 +1,13 @@
 <section class="question-new">
+  <div class="panel">
+    <img (click)="deleteQuestion()" class="delete-icon" src="../../assets/icons/garbage.svg" alt="garbage">
+  </div>
   <div class="question-options-block">
-  <input class="question-title" placeholder="Enter title of your question">
+    <input class="question-title" placeholder="Enter title of your question">
     <ul class="options">
       <li *ngFor="let option of options" >
         <input class="option" placeholder="Enter option">
-        <img class="delete-icon" src="../../assets/icons/garbage.svg" alt="garbage">
+        <img (click)="deleteOption(option, options)" class="delete-icon" src="../../assets/icons/garbage.svg" alt="garbage">
       </li>
     </ul>
     <button (click)="addOption()" mat-raised-button color="primary">Add option</button>
