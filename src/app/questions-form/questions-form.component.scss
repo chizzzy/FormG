@@ -59,3 +59,50 @@ textarea:hover, input:hover{
   width: 20px;
   cursor: pointer;
 }
+.question-type-menu {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: $darkblue;
+  width: 50%;
+  height:60px;
+  margin-top: 20px;
+}
+.button-type {
+  padding-left: 10px;
+  padding-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  width: 25%;
+  height:75%;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.left-arrow {
+  height: 20px;
+  width: 20px;
+  cursor: pointer;
+}
+.icons {
+  margin-right: 10px;
+  height: 20px;
+  width: 20px;
+}
+
+@media only screen and (max-width: 875px)  {
+  .question-type-menu {
+    flex-direction: column;
+    height: auto;
+  }
+  .button-type {
+    height: 40px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 70%;
+  }
+.left-arrow {
+  margin-top: 15px;
+}
+}
