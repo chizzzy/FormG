@@ -12,7 +12,8 @@
   width: 80vw;
   box-shadow: 0 0 11px rgba(0,0,0,.12);
   background-color: #fff;
-  height: 100vh;
+  height: auto;
+  margin-bottom: 50px;
 }
 .title {
   margin-top: 15px;
@@ -53,6 +54,7 @@ textarea:hover, input:hover{
   margin-top: 20px;
   padding-top: 10px;
   padding-bottom: 10px;
+  margin-bottom: 50px;
 }
 .delete-icon {
   height: 20px;
@@ -67,6 +69,7 @@ textarea:hover, input:hover{
   width: 50%;
   height:60px;
   margin-top: 20px;
+  margin-bottom: 50px;
 }
 .button-type {
   padding-left: 10px;

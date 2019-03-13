@@ -1,11 +1,11 @@
 <section class="questions-section">
   <div class="form">
-    <div class="title-inputs">
-      <input placeholder="Enter your title" class="title">
-      <input placeholder="Enter your description" class="description">
+    <div [formGroup]="pollsData" class="title-inputs">
+      <input formControlName="title" placeholder="Enter your title" class="title">
+      <input formControlName="description" placeholder="Enter your description" class="description">
     </div>
     <p *ngFor="let question of questions">
-      <app-question [questionType]="question.image" (deletedElement)="deleteQuestion(question, questions)"></app-question>
+      <app-question (questionTitle)="addQuestionsTitleToLocalStorage($event, question)" [questionType]="question.image" (deletedElement)="deleteQuestion(question, questions)"></app-question>
     </p>
     <button *ngIf="typeBarState !== true else questionType"
             (click)="openQuestionTypeBar()"
@@ -13,7 +13,6 @@
     >Add question</button>
   </div>
 </section>
-
 <ng-template #questionType>
   <div class="question-type-menu">
       <img (click)="closeQuestionTypeBar()" class="left-arrow" src="../../assets/icons/left-arrow.svg" alt="left-arrow">

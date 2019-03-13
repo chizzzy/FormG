@@ -16,11 +16,18 @@ export class QuestionService {
     }
     return elementsArray;
   }
-  addElement(elementsArray) {
-    if (elementsArray.length === 0) {
+  addOption(optionArray) {
+    if (optionArray.length === 0) {
+      return {id: 1};
+    }
+    const currentId = optionArray.length + 1;
+    return {id: currentId};
+  }
+  addQuestion(questionArray) {
+    if (questionArray.length === 0) {
       return {id: 1, image: ''};
     }
-    const currentId = elementsArray.length + 1;
+    const currentId = questionArray.length + 1;
     return {id: currentId, image: ''};
   }
 }
