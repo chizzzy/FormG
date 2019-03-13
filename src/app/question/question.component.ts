@@ -1,5 +1,6 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {QuestionService} from '../question.service';
+import {QuestionTypeService} from '../question-type.service';
 
 @Component({
   selector: 'app-question',
@@ -9,13 +10,13 @@ import {QuestionService} from '../question.service';
 export class QuestionComponent implements OnInit {
   public options = [];
   @Output() deletedElement = new EventEmitter();
-
-  constructor(private questionService: QuestionService) {
+  @Input() questionType;
+  public image;
+  constructor(private questionService: QuestionService, public questionTypeService: QuestionTypeService) {
   }
 
   ngOnInit() {
   }
-
   addOption() {
     const currentOption = this.questionService.addElement(this.options);
     this.options.push(currentOption);

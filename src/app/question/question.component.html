@@ -5,7 +5,8 @@
   <div class="question-options-block">
     <input class="question-title" placeholder="Enter title of your question">
     <ul class="options">
-      <li *ngFor="let option of options" >
+      <li  *ngFor="let option of options">
+        <img class="type-icon" [src]="questionType" alt="type">
         <input class="option" placeholder="Enter option">
         <img (click)="deleteOption(option, options)" class="delete-icon" src="../../assets/icons/garbage.svg" alt="garbage">
       </li>

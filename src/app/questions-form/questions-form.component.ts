@@ -10,6 +10,10 @@ import {QuestionTypeService} from '../question-type.service';
 export class QuestionsFormComponent implements OnInit {
   public questions = [];
   public typeBarState;
+  public image = '';
+  public imgForSingle = '../../assets/icons/radio-on-button.svg';
+  public imgForMultiple = '../../assets/icons/checked.svg';
+  public imgForText = '../../assets/icons/edit-text.svg';
   constructor(private questionService: QuestionService, private questionTypeService: QuestionTypeService) { }
 
   ngOnInit() {
@@ -17,9 +21,19 @@ export class QuestionsFormComponent implements OnInit {
       this.typeBarState = typeBarState;
     });
   }
-  addQuestion() {
+  addQuestion(e) {
+    const questionType = e.target.textContent;
+    if (questionType === 'One answer') {
+      this.image = this.imgForSingle;
+    } else if (questionType === 'Multiple answers') {
+      this.image = this.imgForMultiple;
+    } else if (questionType === 'Text') {
+      this.image = this.imgForText;
+    }
     const currentQuestion = this.questionService.addElement(this.questions);
+    currentQuestion.image = this.image;
     this.questions.push(currentQuestion);
+    this.closeQuestionTypeBar();
   }
   deleteQuestion(currentQuestion, questionsArray) {
     this.questions = this.questionService.deleteElement(currentQuestion, questionsArray);
@@ -29,5 +43,14 @@ export class QuestionsFormComponent implements OnInit {
   }
   closeQuestionTypeBar() {
     this.questionTypeService.closeQuestionTypeBar();
+  }
+  openMultipleBar() {
+    this.questionTypeService.openMultipleBar();
+  }
+  openSingleBar() {
+    this.questionTypeService.openSingleBar();
+  }
+  openTextBar() {
+    this.questionTypeService.openTextBar();
   }
 }
