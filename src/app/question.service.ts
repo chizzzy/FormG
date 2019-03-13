@@ -18,7 +18,7 @@ export class QuestionService {
   }
   addElement(elementsArray) {
     if (elementsArray.length === 0) {
-      return {id: 1,image: ''};
+      return {id: 1, image: ''};
     }
     const currentId = elementsArray.length + 1;
     return {id: currentId, image: ''};

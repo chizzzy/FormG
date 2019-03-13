@@ -44,13 +44,4 @@ export class QuestionsFormComponent implements OnInit {
   closeQuestionTypeBar() {
     this.questionTypeService.closeQuestionTypeBar();
   }
-  openMultipleBar() {
-    this.questionTypeService.openMultipleBar();
-  }
-  openSingleBar() {
-    this.questionTypeService.openSingleBar();
-  }
-  openTextBar() {
-    this.questionTypeService.openTextBar();
-  }
 }
