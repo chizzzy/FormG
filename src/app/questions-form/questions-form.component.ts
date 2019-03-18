@@ -13,14 +13,14 @@ export class QuestionsFormComponent implements OnInit {
   public questions = [];
   public typeBarState;
   public image = '';
-  public questionsTitleGroup = new FormGroup({});
-  pollsData = new FormGroup({
+  public pollsData = new FormGroup({
     title: new FormControl(''),
     description: new FormControl('')
   });
   public imgForSingle = '../../assets/icons/radio-on-button.svg';
   public imgForMultiple = '../../assets/icons/checked.svg';
   public imgForText = '../../assets/icons/edit-text.svg';
+  public questionsData = [];
   public interval$ = interval(5000);
   constructor(private questionService: QuestionService, private questionTypeService: QuestionTypeService) {
     this.interval$.subscribe(() => {
@@ -33,12 +33,24 @@ export class QuestionsFormComponent implements OnInit {
       this.typeBarState = typeBarState;
     });
   }
-  addQuestionsTitleToLocalStorage(title, question) {
-    // const gg = question.id;
-    // const result = {
-    //   gg: title
-    // };
-    // this.questionsTitleGroup.addControl(result, new FormControl());
+  addQuestionsTitleToLocalStorage(questionData) {
+    let found = false;
+    if (this.questionsData.length === 0) {
+      this.questionsData.push(questionData);
+    } else {
+      console.log(this.questionsData);
+      this.questionsData = this.questionsData.map(question => {
+        if (question.id === questionData.id) {
+          found = true;
+          return questionData;
+      } else {
+          return question;
+        }
+      });
+      if (found === false) {
+        this.questionsData.push(questionData);
+      }
+    }
   }
   checkType(questionType) {
     if (questionType === 'One answer') {

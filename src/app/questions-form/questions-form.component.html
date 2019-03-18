@@ -5,7 +5,9 @@
       <input formControlName="description" placeholder="Enter your description" class="description">
     </div>
     <p *ngFor="let question of questions">
-      <app-question (questionTitle)="addQuestionsTitleToLocalStorage($event, question)" [questionType]="question.image" (deletedElement)="deleteQuestion(question, questions)"></app-question>
+      <app-question [currentQuestionId]="question.id" (questionData)="addQuestionsTitleToLocalStorage($event)" [questionType]="question.image"
+                    (deletedElement)="deleteQuestion(question, questions)">
+      </app-question>
     </p>
     <button *ngIf="typeBarState !== true else questionType"
             (click)="openQuestionTypeBar()"
