@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {QuestionService} from '../question.service';
 import {QuestionTypeService} from '../question-type.service';
-import {interval} from 'rxjs';
 import {FormControl, FormGroup} from '@angular/forms';
 
 @Component({
@@ -10,7 +9,8 @@ import {FormControl, FormGroup} from '@angular/forms';
   styleUrls: ['./questions-form.component.scss']
 })
 export class QuestionsFormComponent implements OnInit {
-  public questions = [];
+  public localStoragePollData = JSON.parse(localStorage.getItem('poll'));
+  public questions = this.localStoragePollData.questions || [];
   public typeBarState;
   public image = '';
   public pollsData = new FormGroup({
@@ -21,11 +21,8 @@ export class QuestionsFormComponent implements OnInit {
   public imgForMultiple = '../../assets/icons/checked.svg';
   public imgForText = '../../assets/icons/edit-text.svg';
   public questionsData = [];
-  public interval$ = interval(5000);
+
   constructor(private questionService: QuestionService, private questionTypeService: QuestionTypeService) {
-    this.interval$.subscribe(() => {
-      localStorage.setItem('pollsData', JSON.stringify(this.pollsData.value));
-    });
   }
 
   ngOnInit() {
@@ -33,17 +30,17 @@ export class QuestionsFormComponent implements OnInit {
       this.typeBarState = typeBarState;
     });
   }
-  addQuestionsTitleToLocalStorage(questionData) {
+
+  addPollToLocalStorage(questionData) {
     let found = false;
     if (this.questionsData.length === 0) {
       this.questionsData.push(questionData);
     } else {
-      console.log(this.questionsData);
       this.questionsData = this.questionsData.map(question => {
         if (question.id === questionData.id) {
           found = true;
           return questionData;
-      } else {
+        } else {
           return question;
         }
       });
@@ -51,7 +48,14 @@ export class QuestionsFormComponent implements OnInit {
         this.questionsData.push(questionData);
       }
     }
+    console.log('vashe');
+    localStorage.setItem('poll', JSON.stringify({
+      pollTitle: this.pollsData.value.title,
+      pollDescription: this.pollsData.value.description,
+      questions: this.questionsData
+    }));
   }
+
   checkType(questionType) {
     if (questionType === 'One answer') {
       this.image = this.imgForSingle;

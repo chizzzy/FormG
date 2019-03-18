@@ -18,7 +18,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
   public optionsFormGroup = new FormGroup({});
   public questionFormGroup = new FormGroup({
     title: new FormControl(''),
-    optionsArray: this.optionsFormGroup
+    options: this.optionsFormGroup
   });
   public interval$ = interval(5000);
   public intervalSubscription;
@@ -27,7 +27,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
     this.intervalSubscription =
       this.interval$.subscribe(() => {
         const outputQuestion = {id: this.currentQuestionId, value: this.questionFormGroup.value};
-       this.questionData.emit(outputQuestion);
+        this.questionData.emit(outputQuestion);
       });
   }
 
