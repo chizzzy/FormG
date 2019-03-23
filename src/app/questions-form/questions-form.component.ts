@@ -9,8 +9,8 @@ import {FormControl, FormGroup} from '@angular/forms';
   styleUrls: ['./questions-form.component.scss']
 })
 export class QuestionsFormComponent implements OnInit {
-  public localStoragePollData = JSON.parse(localStorage.getItem('poll'));
-  public questions = this.localStoragePollData.questions || [];
+  public localStoragePollData;
+  public questions;
   public typeBarState;
   public image = '';
   public pollsData = new FormGroup({
@@ -26,6 +26,17 @@ export class QuestionsFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.localStoragePollData = JSON.parse(localStorage.getItem('poll'));
+    if (this.localStoragePollData === null) {
+      this.questions = [];
+    } else {
+      this.questions = this.localStoragePollData.questions;
+      this.pollsData.setValue({
+        title: this.localStoragePollData.pollTitle,
+        description: this.localStoragePollData.pollDescription
+      });
+    }
+
     this.questionTypeService.questionTypeBar$.subscribe(typeBarState => {
       this.typeBarState = typeBarState;
     });
@@ -48,11 +59,10 @@ export class QuestionsFormComponent implements OnInit {
         this.questionsData.push(questionData);
       }
     }
-    console.log('vashe');
     localStorage.setItem('poll', JSON.stringify({
       pollTitle: this.pollsData.value.title,
       pollDescription: this.pollsData.value.description,
-      questions: this.questionsData
+      questions: this.questionsData,
     }));
   }
 
@@ -67,7 +77,7 @@ export class QuestionsFormComponent implements OnInit {
   }
 
   addQuestion(e) {
-    const questionType = e.target.textContent;
+   const questionType = e.target.textContent;
     this.checkType(questionType);
     const currentQuestion = this.questionService.addQuestion(this.questions);
     currentQuestion.image = this.image;
@@ -77,6 +87,13 @@ export class QuestionsFormComponent implements OnInit {
 
   deleteQuestion(currentQuestion, questionsArray) {
     this.questions = this.questionService.deleteElement(currentQuestion, questionsArray);
+    const pollData = JSON.parse(localStorage.getItem('poll'));
+    pollData.questions = pollData.questions.filter(question => {
+      if (currentQuestion.id !== question.id) {
+        return question;
+      }
+    });
+    localStorage.setItem('poll', JSON.stringify(pollData));
   }
 
   openQuestionTypeBar() {

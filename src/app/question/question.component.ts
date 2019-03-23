@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {QuestionService} from '../question.service';
 import {interval} from 'rxjs';
 import {FormControl, FormGroup} from '@angular/forms';
@@ -8,34 +8,56 @@ import {FormControl, FormGroup} from '@angular/forms';
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.scss']
 })
-export class QuestionComponent implements OnInit, OnDestroy {
+export class QuestionComponent implements OnInit {
   public options = [];
   @Output() deletedElement = new EventEmitter();
   @Output() questionData = new EventEmitter();
   @Input() questionType;
-  @Input() currentQuestionId;
+  @Input() currentQuestion;
   public image;
+  public title;
   public optionsFormGroup = new FormGroup({});
   public questionFormGroup = new FormGroup({
     title: new FormControl(''),
     options: this.optionsFormGroup
   });
-  public interval$ = interval(5000);
+  public interval$ = interval(3000);
   public intervalSubscription;
+  public localStoragePollData;
 
   constructor(private questionService: QuestionService) {
-    this.intervalSubscription =
-      this.interval$.subscribe(() => {
-        const outputQuestion = {id: this.currentQuestionId, value: this.questionFormGroup.value};
-        this.questionData.emit(outputQuestion);
-      });
-  }
-
-  ngOnDestroy() {
-    this.intervalSubscription.unsubscribe();
   }
 
   ngOnInit() {
+    this.localStoragePollData = JSON.parse(localStorage.getItem('poll'));
+    if (this.localStoragePollData !== null) {
+      if (this.localStoragePollData.questions.length !== 0) {
+        const questionDataFromLocalStorage = this.localStoragePollData.questions
+          .find(question => question.id === this.currentQuestion.id);
+        if (questionDataFromLocalStorage !== undefined) {
+          this.title = questionDataFromLocalStorage.value.title;
+          this.questionFormGroup.patchValue({title: this.title});
+          this.image = questionDataFromLocalStorage.image;
+          const options = questionDataFromLocalStorage.value.options;
+          if (Object.keys(options).length > 0) {
+            for (const key in options) {
+              if (options.hasOwnProperty(key)) {
+                this.optionsFormGroup.addControl(key, new FormControl(''));
+                this.options.push({option: options[key], id: key});
+                this.optionsFormGroup.patchValue({[key]: options[key]});
+              }
+            }
+          }
+        }
+      }
+    }
+    this.intervalSubscription =
+      this.interval$.subscribe(() => {
+        if (this.questionFormGroup.value !== undefined) {
+          const outputQuestion = {id: this.currentQuestion.id, value: this.questionFormGroup.value, image: this.currentQuestion.image};
+          this.questionData.emit(outputQuestion);
+        }
+      });
   }
 
   addOption() {
