@@ -3,7 +3,6 @@ import {QuestionService} from '../question.service';
 import {QuestionTypeService} from '../question-type.service';
 import {FormControl, FormGroup} from '@angular/forms';
 import {PollsListService} from '../polls-list.service';
-import {interval} from "rxjs";
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
@@ -28,7 +27,6 @@ export class QuestionsFormComponent implements OnInit {
   public imgForMultiple = '../../assets/icons/checked.svg';
   public imgForText = '../../assets/icons/edit-text.svg';
   public questionsData = [];
-  public interval = interval(2000);
 
   constructor(private questionService: QuestionService, private questionTypeService: QuestionTypeService,
               private pollsListService: PollsListService, private route: ActivatedRoute) {
@@ -36,11 +34,13 @@ export class QuestionsFormComponent implements OnInit {
 
   ngOnInit() {
     this.localStoragePollData = JSON.parse(localStorage.getItem('poll'));
+    this.questionTypeService.questionTypeBar$.subscribe(typeBarState => {
+      this.typeBarState = typeBarState;
+    });
     this.pollData = this.route.snapshot.data.resolveData;
-    console.log(this.pollData);
     if (this.pollData === undefined) {
+      this.pollData = {id: 1};
       this.questions = [];
-      this.localStoragePollData = [];
       return;
     }
     this.questions = this.pollData.questions;
@@ -50,15 +50,7 @@ export class QuestionsFormComponent implements OnInit {
       title: this.pollData.pollTitle,
       description: this.pollData.pollDescription
     });
-    // this.interval.subscribe(() => {
-    //   this.title = this.pollData.pollTitle;
-    //   this.description = this.pollData.pollDescription;
-    // })
 
-
-    this.questionTypeService.questionTypeBar$.subscribe(typeBarState => {
-      this.typeBarState = typeBarState;
-    });
   }
 
   addPollToLocalStorage(questionData) {
@@ -78,11 +70,18 @@ export class QuestionsFormComponent implements OnInit {
         this.questionsData.push(questionData);
       }
     }
-    localStorage.setItem('poll', JSON.stringify({
-      pollTitle: this.pollsHeader.value.title,
-      pollDescription: this.pollsHeader.value.description,
-      questions: this.questionsData,
-    }));
+    const updatedPolls = this.localStoragePollData.map(poll => {
+      if (this.pollData.id === poll.id) {
+        return {
+          id: poll.id,
+          pollTitle: this.pollsHeader.value.title,
+          pollDescription: this.pollsHeader.value.description,
+          questions: this.questionsData
+        };
+      }
+    });
+
+    localStorage.setItem('poll', JSON.stringify(updatedPolls));
   }
 
   checkType(questionType) {
@@ -101,18 +100,28 @@ export class QuestionsFormComponent implements OnInit {
     const currentQuestion = this.questionService.addQuestion(this.questions);
     currentQuestion.image = this.image;
     this.questions.push(currentQuestion);
+    console.log(currentQuestion);
     this.closeQuestionTypeBar();
   }
 
   deleteQuestion(currentQuestion, questionsArray) {
     this.questions = this.questionService.deleteElement(currentQuestion, questionsArray);
-    const pollData = JSON.parse(localStorage.getItem('poll'));
+    let localStorageData = JSON.parse(localStorage.getItem('poll'));
+    const pollData = localStorageData.filter(poll => poll.id === this.pollData.id)[0];
     pollData.questions = pollData.questions.filter(question => {
       if (currentQuestion.id !== question.id) {
         return question;
       }
     });
-    localStorage.setItem('poll', JSON.stringify(pollData));
+    localStorageData = localStorageData.map(poll => {
+      if (poll.id === pollData.id) {
+        return pollData;
+      } else {
+        return poll;
+      }
+    });
+    console.log(localStorageData);
+    localStorage.setItem('poll', JSON.stringify(localStorageData));
   }
 
   openQuestionTypeBar() {

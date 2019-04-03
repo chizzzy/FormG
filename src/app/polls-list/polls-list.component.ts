@@ -9,10 +9,8 @@ import {PollsListService} from '../polls-list.service';
 export class PollsListComponent implements OnInit {
   public polls;
   constructor(private pollsListService: PollsListService) { }
- // JSON.parse(localStorage.getItem('poll'));
   ngOnInit() {
     this.polls = JSON.parse(localStorage.getItem('poll'));
-    console.log(this.polls);
     if (this.polls === null) {
       this.polls = [];
     }
@@ -20,6 +18,9 @@ export class PollsListComponent implements OnInit {
   openPoll(poll) {
     this.pollsListService.openPoll(poll);
     console.log(poll);
+  }
+  createPoll(polls) {
+    this.pollsListService.createPoll(polls);
   }
 
 }

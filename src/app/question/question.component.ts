@@ -14,6 +14,7 @@ export class QuestionComponent implements OnInit {
   @Output() questionData = new EventEmitter();
   @Input() questionType;
   @Input() currentQuestion;
+  @Input() selectedPoll;
   public image;
   public title;
   public optionsFormGroup = new FormGroup({});
@@ -24,15 +25,29 @@ export class QuestionComponent implements OnInit {
   public interval$ = interval(3000);
   public intervalSubscription;
   public localStoragePollData;
+  public currentQuestionFromSelectedPoll;
 
   constructor(private questionService: QuestionService) {
   }
 
   ngOnInit() {
+    if ('questions' in this.selectedPoll) {
+      this.currentQuestionFromSelectedPoll = this.selectedPoll.questions.filter(ques => ques.id === this.currentQuestion.id)[0];
+      this.title = this.currentQuestionFromSelectedPoll.value.title;
+      const options = this.currentQuestionFromSelectedPoll.value.options;
+      if (Object.keys(options).length > 0) {
+        for (const key in options) {
+          if (options.hasOwnProperty(key)) {
+           this.options.push({id: key, title: options[key]});
+          }
+        }
+      }
+    }
+    console.log(this.selectedPoll);
     this.localStoragePollData = JSON.parse(localStorage.getItem('poll'));
     if (this.localStoragePollData !== null) {
-      if (this.localStoragePollData.questions.length !== 0) {
-        const questionDataFromLocalStorage = this.localStoragePollData.questions
+      if (this.selectedPoll.questions !== undefined) {
+        const questionDataFromLocalStorage = this.selectedPoll.questions
           .find(question => question.id === this.currentQuestion.id);
         if (questionDataFromLocalStorage !== undefined) {
           this.title = questionDataFromLocalStorage.value.title;

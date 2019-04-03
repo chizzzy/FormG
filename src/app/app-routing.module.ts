@@ -16,7 +16,7 @@ const routes: Routes = [
   {
     path: 'polls/:id', component: FormsPageComponent, resolve: {resolveData: PollResolver}
   },
-  {path: 'polls/create', component: FormsPageComponent}
+  {path: 'polls/create', component: FormsPageComponent, resolve: {resolveData: PollResolver}}
 
 ];
 
