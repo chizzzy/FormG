@@ -13,12 +13,6 @@ export interface Language {
 })
 export class NavbarComponent implements OnInit {
   selectedValue: string;
-
-  languages: Language[] = [
-    {value: 'english-0', viewValue: 'English'},
-    {value: 'russian-1', viewValue: 'Русский'},
-    {value: 'ukrainian-2', viewValue: 'Українська'}
-  ];
   constructor() { }
 
   ngOnInit() {

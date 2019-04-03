@@ -1,49 +1,31 @@
 @import "../../assets/variables";
+
 button {
   background-color: white;
 }
-//works
-.mat-select-arrow {
-  color: #fff;
-}
-//works
-.mat-select-value-text {
-  color: #fff;
-}
-//Works
-.mat-form-field.mat-focused .mat-form-field-ripple {
-  background-color: #fff;
-}
-.mat-select-placeholder .ng-tns-c5-1 .ng-star-inserted {
-  color: #fff;
-}
-//works
-.mat-form-field-appearance-legacy .mat-form-field-underline {
-  background-color: #fff;
-}
-//works
-.mat-form-field.mat-focused.mat-primary .mat-select-arrow {
-  color: #fff;
-}
-//works
-.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
-  color: $darkblue;
-}
+
 .image {
   width: 160px;
   height: 157px;
   cursor: pointer;
 }
+
 .navbar {
   background-color: $darkblue;
   height: 10vh;
   display: flex;
   justify-content: center;
 }
+
 .navbar-content {
   height: 100%;
   width: 80%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+.polls-title {
+  color: white;
+  font-size: 20px;
+  text-decoration: none;
 }

@@ -1,0 +1,14 @@
+<section class="wrapper">
+<app-navbar></app-navbar>
+  <div class="polls-list">
+    <ul>
+      <li *ngFor="let poll of polls; let i = index">
+        <div routerLink="/{{i}}}" (click)="openPoll(poll)" class="poll">
+          <h1>{{poll.pollTitle}}</h1>
+          <h2>{{poll.pollDescription}}</h2>
+        </div>
+      </li>
+    </ul>
+    <button (click)="openPoll()" mat-raised-button color="primary">Add poll</button>
+  </div>
+</section>

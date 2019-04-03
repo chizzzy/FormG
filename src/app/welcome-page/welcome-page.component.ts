@@ -10,6 +10,7 @@ export class WelcomePageComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    //localStorage.setItem('poll', JSON.stringify([{pollTitle: 'aaaaaaa', pollDescription: 'daaaaaaaaaaa'}, {pollTitle: 'gg', pollDescription: 'hh'}]));
   }
 
 }

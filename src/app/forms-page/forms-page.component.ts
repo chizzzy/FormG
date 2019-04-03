@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {PollsListService} from '../polls-list.service';
 
 @Component({
   selector: 'app-forms-page',
@@ -6,10 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./forms-page.component.scss']
 })
 export class FormsPageComponent implements OnInit {
-
-  constructor() { }
+  public formsPageState;
+  constructor(private pollsListService: PollsListService) { }
 
   ngOnInit() {
+    this.pollsListService.formsPageState$.subscribe(formsPageState => {
+      this.formsPageState = formsPageState;
+      console.log(this.formsPageState);
+    });
   }
 
 }

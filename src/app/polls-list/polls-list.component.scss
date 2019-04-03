@@ -1,0 +1,15 @@
+@import "../../assets/variables";
+.wrapper {
+  height: auto;
+  width: 100vw;
+}
+.polls-list {
+  height: 80vh;
+}
+.poll {
+  width: 600px;
+  height: 300px;
+  margin-top: 40px;
+  background-color: yellow;
+  cursor: pointer;
+}

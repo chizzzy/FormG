@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {QuestionService} from '../question.service';
 import {QuestionTypeService} from '../question-type.service';
 import {FormControl, FormGroup} from '@angular/forms';
+import {PollsListService} from '../polls-list.service';
 
 @Component({
   selector: 'app-questions',
@@ -9,11 +10,13 @@ import {FormControl, FormGroup} from '@angular/forms';
   styleUrls: ['./questions-form.component.scss']
 })
 export class QuestionsFormComponent implements OnInit {
+  public polls;
+  public pollData;
   public localStoragePollData;
   public questions;
   public typeBarState;
   public image = '';
-  public pollsData = new FormGroup({
+  public pollsHeader = new FormGroup({
     title: new FormControl(''),
     description: new FormControl('')
   });
@@ -22,16 +25,21 @@ export class QuestionsFormComponent implements OnInit {
   public imgForText = '../../assets/icons/edit-text.svg';
   public questionsData = [];
 
-  constructor(private questionService: QuestionService, private questionTypeService: QuestionTypeService) {
+  constructor(private questionService: QuestionService, private questionTypeService: QuestionTypeService,
+              private pollsListService: PollsListService) {
   }
 
   ngOnInit() {
+    this.pollsListService.pollData$.subscribe(pollData => {
+      this.pollData = pollData;
+    });
     this.localStoragePollData = JSON.parse(localStorage.getItem('poll'));
     if (this.localStoragePollData === null) {
       this.questions = [];
+      this.localStoragePollData = [];
     } else {
       this.questions = this.localStoragePollData.questions;
-      this.pollsData.setValue({
+      this.pollsHeader.setValue({
         title: this.localStoragePollData.pollTitle,
         description: this.localStoragePollData.pollDescription
       });
@@ -60,8 +68,8 @@ export class QuestionsFormComponent implements OnInit {
       }
     }
     localStorage.setItem('poll', JSON.stringify({
-      pollTitle: this.pollsData.value.title,
-      pollDescription: this.pollsData.value.description,
+      pollTitle: this.pollsHeader.value.title,
+      pollDescription: this.pollsHeader.value.description,
       questions: this.questionsData,
     }));
   }
