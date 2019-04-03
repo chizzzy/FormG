@@ -11,10 +11,7 @@ export class PollsListService {
   public formsPageState$ = this.formsPageStateSource.asObservable();
   constructor() { }
   openPoll(poll) {
-    this.formsPageStateSource.next(true);
     this.pollDataSubject.next(poll);
   }
-  closePoll() {
-    this.formsPageStateSource.next(false);
-  }
+
 }

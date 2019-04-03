@@ -1,8 +1,8 @@
 <section class="questions-section">
   <div class="form">
-    <div [formGroup]="pollsHeader" class="title-inputs">
-      <input formControlName="title" [value]="pollsHeader.value.title" placeholder="Enter your title" class="title">
-      <input formControlName="description" [value]="pollsHeader.value.description" placeholder="Enter your description" class="description">
+    <div  [formGroup]="pollsHeader" class="title-inputs">
+      <input formControlName="title" [value]="title || ''" placeholder="Enter your title" class="title">
+      <input formControlName="description" [value]="description || ''" placeholder="Enter your description" class="description">
     </div>
     <p *ngFor="let question of questions">
       <app-question [currentQuestion]="question" (questionData)="addPollToLocalStorage($event)" [questionType]="question.image"

@@ -4,6 +4,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {WelcomePageComponent} from './welcome-page/welcome-page.component';
 import {FormsPageComponent} from './forms-page/forms-page.component';
 import {PollsListComponent} from './polls-list/polls-list.component';
+import {PollResolver} from './poll-resolver';
 
 const routes: Routes = [
   {
@@ -11,13 +12,12 @@ const routes: Routes = [
   },
   {
     path: 'polls', component: PollsListComponent,
-    children: [
-      {
-        path: ':id', component: FormsPageComponent,
-      },
-    ]
   },
-  {path: 'create', component: FormsPageComponent}
+  {
+    path: 'polls/:id', component: FormsPageComponent, resolve: {resolveData: PollResolver}
+  },
+  {path: 'polls/create', component: FormsPageComponent}
+
 ];
 
 @NgModule({
@@ -25,7 +25,8 @@ const routes: Routes = [
     CommonModule,
     [RouterModule.forRoot(routes)]
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [PollResolver]
 })
 
 export class AppRoutingModule {

@@ -1,8 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {QuestionService} from '../question.service';
 import {QuestionTypeService} from '../question-type.service';
 import {FormControl, FormGroup} from '@angular/forms';
 import {PollsListService} from '../polls-list.service';
+import {interval} from "rxjs";
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-questions',
@@ -10,6 +12,8 @@ import {PollsListService} from '../polls-list.service';
   styleUrls: ['./questions-form.component.scss']
 })
 export class QuestionsFormComponent implements OnInit {
+  public title;
+  public description;
   public polls;
   public pollData;
   public localStoragePollData;
@@ -24,26 +28,33 @@ export class QuestionsFormComponent implements OnInit {
   public imgForMultiple = '../../assets/icons/checked.svg';
   public imgForText = '../../assets/icons/edit-text.svg';
   public questionsData = [];
+  public interval = interval(2000);
 
   constructor(private questionService: QuestionService, private questionTypeService: QuestionTypeService,
-              private pollsListService: PollsListService) {
+              private pollsListService: PollsListService, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.pollsListService.pollData$.subscribe(pollData => {
-      this.pollData = pollData;
-    });
     this.localStoragePollData = JSON.parse(localStorage.getItem('poll'));
-    if (this.localStoragePollData === null) {
+    this.pollData = this.route.snapshot.data.resolveData;
+    console.log(this.pollData);
+    if (this.pollData === undefined) {
       this.questions = [];
       this.localStoragePollData = [];
-    } else {
-      this.questions = this.localStoragePollData.questions;
-      this.pollsHeader.setValue({
-        title: this.localStoragePollData.pollTitle,
-        description: this.localStoragePollData.pollDescription
-      });
+      return;
     }
+    this.questions = this.pollData.questions;
+    this.title = this.pollData.pollTitle;
+    this.description = this.pollData.pollDescription;
+    this.pollsHeader.setValue({
+      title: this.pollData.pollTitle,
+      description: this.pollData.pollDescription
+    });
+    // this.interval.subscribe(() => {
+    //   this.title = this.pollData.pollTitle;
+    //   this.description = this.pollData.pollDescription;
+    // })
+
 
     this.questionTypeService.questionTypeBar$.subscribe(typeBarState => {
       this.typeBarState = typeBarState;
@@ -85,7 +96,7 @@ export class QuestionsFormComponent implements OnInit {
   }
 
   addQuestion(e) {
-   const questionType = e.target.textContent;
+    const questionType = e.target.textContent;
     this.checkType(questionType);
     const currentQuestion = this.questionService.addQuestion(this.questions);
     currentQuestion.image = this.image;
