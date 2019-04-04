@@ -17,7 +17,6 @@ export class PollsListComponent implements OnInit {
   }
   openPoll(poll) {
     this.pollsListService.openPoll(poll);
-    console.log(poll);
   }
   createPoll(polls) {
     this.pollsListService.createPoll(polls);

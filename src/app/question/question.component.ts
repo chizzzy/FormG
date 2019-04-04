@@ -15,6 +15,7 @@ export class QuestionComponent implements OnInit {
   @Input() questionType;
   @Input() currentQuestion;
   @Input() selectedPoll;
+  @Input() ques;
   public image;
   public title;
   public optionsFormGroup = new FormGroup({});
@@ -24,7 +25,6 @@ export class QuestionComponent implements OnInit {
   });
   public interval$ = interval(3000);
   public intervalSubscription;
-  public localStoragePollData;
   public currentQuestionFromSelectedPoll;
 
   constructor(private questionService: QuestionService) {
@@ -33,34 +33,16 @@ export class QuestionComponent implements OnInit {
   ngOnInit() {
     if ('questions' in this.selectedPoll) {
       this.currentQuestionFromSelectedPoll = this.selectedPoll.questions.filter(ques => ques.id === this.currentQuestion.id)[0];
-      this.title = this.currentQuestionFromSelectedPoll.value.title;
-      const options = this.currentQuestionFromSelectedPoll.value.options;
-      if (Object.keys(options).length > 0) {
-        for (const key in options) {
-          if (options.hasOwnProperty(key)) {
-           this.options.push({id: key, title: options[key]});
-          }
-        }
-      }
-    }
-    console.log(this.selectedPoll);
-    this.localStoragePollData = JSON.parse(localStorage.getItem('poll'));
-    if (this.localStoragePollData !== null) {
-      if (this.selectedPoll.questions !== undefined) {
-        const questionDataFromLocalStorage = this.selectedPoll.questions
-          .find(question => question.id === this.currentQuestion.id);
-        if (questionDataFromLocalStorage !== undefined) {
-          this.title = questionDataFromLocalStorage.value.title;
-          this.questionFormGroup.patchValue({title: this.title});
-          this.image = questionDataFromLocalStorage.image;
-          const options = questionDataFromLocalStorage.value.options;
-          if (Object.keys(options).length > 0) {
-            for (const key in options) {
-              if (options.hasOwnProperty(key)) {
-                this.optionsFormGroup.addControl(key, new FormControl(''));
-                this.options.push({option: options[key], id: key});
-                this.optionsFormGroup.patchValue({[key]: options[key]});
-              }
+      if (this.currentQuestionFromSelectedPoll.hasOwnProperty('info')) {
+        this.title = this.currentQuestionFromSelectedPoll.info.title;
+        const options = this.currentQuestionFromSelectedPoll.info.options;
+        if (Object.keys(options).length > 0) {
+          for (const key in options) {
+            if (options.hasOwnProperty(key)) {
+              this.options.push({id: key, title: options[key]});
+              this.optionsFormGroup.addControl(key, new FormControl(''));
+              this.optionsFormGroup.patchValue({[key]: options[key]});
+              this.questionFormGroup.patchValue({title: this.title});
             }
           }
         }
@@ -68,10 +50,13 @@ export class QuestionComponent implements OnInit {
     }
     this.intervalSubscription =
       this.interval$.subscribe(() => {
-        if (this.questionFormGroup.value !== undefined) {
-          const outputQuestion = {id: this.currentQuestion.id, value: this.questionFormGroup.value, image: this.currentQuestion.image};
+        console.log(this.questionFormGroup);
+          const outputQuestion = {
+            id: this.currentQuestion.id,
+            info: this.questionFormGroup.value,
+            image: this.currentQuestion.image
+          };
           this.questionData.emit(outputQuestion);
-        }
       });
   }
 
@@ -87,6 +72,7 @@ export class QuestionComponent implements OnInit {
 
   deleteOption(currentElement, options) {
     this.options = this.questionService.deleteElement(currentElement, options);
+    this.optionsFormGroup.removeControl(currentElement.id);
     return this.options;
   }
 

@@ -13,7 +13,6 @@ export class FormsPageComponent implements OnInit {
   ngOnInit() {
     this.pollsListService.formsPageState$.subscribe(formsPageState => {
       this.formsPageState = formsPageState;
-      console.log(this.formsPageState);
     });
   }
 

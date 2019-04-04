@@ -23,7 +23,6 @@ export class PollsListService {
       polls.push(poll);
     }
     localStorage.setItem('poll', JSON.stringify(polls));
-    console.log(poll);
     this.pollDataSubject.next(poll);
   }
 

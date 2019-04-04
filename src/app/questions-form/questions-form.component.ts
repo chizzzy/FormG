@@ -4,6 +4,7 @@ import {QuestionTypeService} from '../question-type.service';
 import {FormControl, FormGroup} from '@angular/forms';
 import {PollsListService} from '../polls-list.service';
 import {ActivatedRoute} from '@angular/router';
+import {interval} from 'rxjs';
 
 @Component({
   selector: 'app-questions',
@@ -27,6 +28,7 @@ export class QuestionsFormComponent implements OnInit {
   public imgForMultiple = '../../assets/icons/checked.svg';
   public imgForText = '../../assets/icons/edit-text.svg';
   public questionsData = [];
+  public interval$ = interval(3000);
 
   constructor(private questionService: QuestionService, private questionTypeService: QuestionTypeService,
               private pollsListService: PollsListService, private route: ActivatedRoute) {
@@ -44,16 +46,16 @@ export class QuestionsFormComponent implements OnInit {
       return;
     }
     this.questions = this.pollData.questions;
-    this.title = this.pollData.pollTitle;
+    this.title = this.pollData.pollTitle || '';
     this.description = this.pollData.pollDescription;
     this.pollsHeader.setValue({
       title: this.pollData.pollTitle,
       description: this.pollData.pollDescription
     });
-
   }
 
   addPollToLocalStorage(questionData) {
+    this.localStoragePollData = JSON.parse(localStorage.getItem('poll'));
     let found = false;
     if (this.questionsData.length === 0) {
       this.questionsData.push(questionData);
@@ -100,7 +102,6 @@ export class QuestionsFormComponent implements OnInit {
     const currentQuestion = this.questionService.addQuestion(this.questions);
     currentQuestion.image = this.image;
     this.questions.push(currentQuestion);
-    console.log(currentQuestion);
     this.closeQuestionTypeBar();
   }
 
@@ -120,7 +121,6 @@ export class QuestionsFormComponent implements OnInit {
         return poll;
       }
     });
-    console.log(localStorageData);
     localStorage.setItem('poll', JSON.stringify(localStorageData));
   }
 
