@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {QuestionService} from '../question.service';
 import {interval} from 'rxjs';
 import {FormControl, FormGroup} from '@angular/forms';
@@ -8,7 +8,7 @@ import {FormControl, FormGroup} from '@angular/forms';
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.scss']
 })
-export class QuestionComponent implements OnInit {
+export class QuestionComponent implements OnInit, OnDestroy {
   public options = [];
   @Output() deletedElement = new EventEmitter();
   @Output() questionData = new EventEmitter();
@@ -31,7 +31,7 @@ export class QuestionComponent implements OnInit {
   }
 
   ngOnInit() {
-    if ('questions' in this.selectedPoll) {
+    if (this.selectedPoll.hasOwnProperty('questions')) {
       this.currentQuestionFromSelectedPoll = this.selectedPoll.questions.filter(ques => ques.id === this.currentQuestion.id)[0];
       if (this.currentQuestionFromSelectedPoll.hasOwnProperty('info')) {
         this.title = this.currentQuestionFromSelectedPoll.info.title;
@@ -50,7 +50,6 @@ export class QuestionComponent implements OnInit {
     }
     this.intervalSubscription =
       this.interval$.subscribe(() => {
-        console.log(this.questionFormGroup);
           const outputQuestion = {
             id: this.currentQuestion.id,
             info: this.questionFormGroup.value,
@@ -58,6 +57,9 @@ export class QuestionComponent implements OnInit {
           };
           this.questionData.emit(outputQuestion);
       });
+  }
+  ngOnDestroy() {
+    this.intervalSubscription.unsubscribe();
   }
 
   addOption() {

@@ -10,7 +10,8 @@ export class PollResolver implements Resolve<any> {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+
     this.pollsListService.pollData$.subscribe(data => this.data = data);
-    return this.data;
+      return this.data;
   }
 }

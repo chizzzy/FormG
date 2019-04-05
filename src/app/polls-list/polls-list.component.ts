@@ -10,6 +10,7 @@ export class PollsListComponent implements OnInit {
   public polls;
   constructor(private pollsListService: PollsListService) { }
   ngOnInit() {
+
     this.polls = JSON.parse(localStorage.getItem('poll'));
     if (this.polls === null) {
       this.polls = [];

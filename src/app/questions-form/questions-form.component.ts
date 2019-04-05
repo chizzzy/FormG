@@ -3,7 +3,7 @@ import {QuestionService} from '../question.service';
 import {QuestionTypeService} from '../question-type.service';
 import {FormControl, FormGroup} from '@angular/forms';
 import {PollsListService} from '../polls-list.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {interval} from 'rxjs';
 
 @Component({
@@ -28,34 +28,44 @@ export class QuestionsFormComponent implements OnInit {
   public imgForMultiple = '../../assets/icons/checked.svg';
   public imgForText = '../../assets/icons/edit-text.svg';
   public questionsData = [];
-  public interval$ = interval(3000);
 
   constructor(private questionService: QuestionService, private questionTypeService: QuestionTypeService,
-              private pollsListService: PollsListService, private route: ActivatedRoute) {
+              private pollsListService: PollsListService, private route: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit() {
-    this.localStoragePollData = JSON.parse(localStorage.getItem('poll'));
     this.questionTypeService.questionTypeBar$.subscribe(typeBarState => {
       this.typeBarState = typeBarState;
     });
-    this.pollData = this.route.snapshot.data.resolveData;
-    if (this.pollData === undefined) {
+    const pollId = this.router.url.match(/\d+/);
+    if (pollId === null) {
       this.pollData = {id: 1};
       this.questions = [];
       return;
     }
-    this.questions = this.pollData.questions;
-    this.title = this.pollData.pollTitle || '';
-    this.description = this.pollData.pollDescription;
-    this.pollsHeader.setValue({
-      title: this.pollData.pollTitle,
-      description: this.pollData.pollDescription
-    });
+    this.localStoragePollData = JSON.parse(localStorage.getItem('poll')).filter(poll => poll.id === parseInt(pollId[0], 10));
+    if (this.localStoragePollData.length > 0) {
+      this.pollData = this.localStoragePollData;
+      this.initializePollData(this.pollData[0]);
+      return;
+    }
+    this.localStoragePollData = JSON.parse(localStorage.getItem('poll'));
+    this.pollData = this.route.snapshot.data.resolveData;
+    this.initializePollData(this.pollData[0]);
   }
 
+
+  initializePollData(pollData) {
+    this.questions = pollData.questions;
+    this.title = pollData.pollTitle;
+    this.description = pollData.pollDescription;
+    this.pollsHeader.setValue({
+      title: pollData.pollTitle,
+      description: pollData.pollDescription
+    });
+  }
   addPollToLocalStorage(questionData) {
-    this.localStoragePollData = JSON.parse(localStorage.getItem('poll'));
+    const localStorageData = JSON.parse(localStorage.getItem('poll'));
     let found = false;
     if (this.questionsData.length === 0) {
       this.questionsData.push(questionData);
@@ -72,17 +82,18 @@ export class QuestionsFormComponent implements OnInit {
         this.questionsData.push(questionData);
       }
     }
-    const updatedPolls = this.localStoragePollData.map(poll => {
-      if (this.pollData.id === poll.id) {
-        return {
-          id: poll.id,
-          pollTitle: this.pollsHeader.value.title,
-          pollDescription: this.pollsHeader.value.description,
-          questions: this.questionsData
-        };
-      }
+    const updatedPolls = localStorageData.map(poll => {
+        if (this.pollData.id === poll.id) {
+          return {
+            id: poll.id,
+            pollTitle: this.pollsHeader.value.title,
+            pollDescription: this.pollsHeader.value.description,
+            questions: this.questionsData
+          };
+        } else {
+          return poll;
+        }
     });
-
     localStorage.setItem('poll', JSON.stringify(updatedPolls));
   }
 

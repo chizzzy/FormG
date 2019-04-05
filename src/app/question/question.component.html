@@ -3,7 +3,7 @@
     <img (click)="deleteQuestion()" class="delete-icon" src="../../assets/icons/garbage.svg" alt="garbage">
   </div>
   <div [formGroup]="questionFormGroup" class="question-options-block">
-    <input [value]="title" formControlName="title" class="question-title" placeholder="Enter title of your question">
+    <input [value]="title || ''" formControlName="title" class="question-title" placeholder="Enter title of your question">
     <ul [formGroup]="optionsFormGroup" class="options">
       <li *ngFor="let option of options">
         <img class="type-icon" [src]="currentQuestion.image || image" alt="type">

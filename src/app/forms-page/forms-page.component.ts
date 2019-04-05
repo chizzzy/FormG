@@ -11,6 +11,7 @@ export class FormsPageComponent implements OnInit {
   constructor(private pollsListService: PollsListService) { }
 
   ngOnInit() {
+
     this.pollsListService.formsPageState$.subscribe(formsPageState => {
       this.formsPageState = formsPageState;
     });

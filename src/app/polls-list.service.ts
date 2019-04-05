@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import {Subject} from 'rxjs';
+import {BehaviorSubject, Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PollsListService {
-  private pollDataSubject = new Subject();
+  private pollDataSubject = new BehaviorSubject('val');
   public pollData$ = this.pollDataSubject.asObservable();
   private formsPageStateSource = new Subject();
   public formsPageState$ = this.formsPageStateSource.asObservable();
