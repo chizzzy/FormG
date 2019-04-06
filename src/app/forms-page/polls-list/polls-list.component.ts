@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {PollsListService} from '../polls-list.service';
+import {PollsListService} from '../question/services/polls-list.service';
 
 @Component({
   selector: 'app-polls-list',

@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {ViewEncapsulation} from '@angular/cli/lib/config/schema';
-export interface Language {
-  value: string;
-  viewValue: string;
-}
 
 @Component({
   selector: 'app-navbar',
@@ -12,7 +8,6 @@ export interface Language {
   encapsulation: ViewEncapsulation.None
 })
 export class NavbarComponent implements OnInit {
-  selectedValue: string;
   constructor() { }
 
   ngOnInit() {

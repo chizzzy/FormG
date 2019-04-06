@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {QuestionService} from '../question.service';
+import {QuestionService} from '../../services/question.service';
 import {interval} from 'rxjs';
 import {FormControl, FormGroup} from '@angular/forms';
 
@@ -12,7 +12,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
   public options = [];
   @Output() deletedElement = new EventEmitter();
   @Output() questionData = new EventEmitter();
-  @Input() questionType;
+  @Input() questionType: string;
   @Input() currentQuestion;
   @Input() selectedPoll;
   @Input() ques;
@@ -25,18 +25,17 @@ export class QuestionComponent implements OnInit, OnDestroy {
   });
   public interval$ = interval(3000);
   public intervalSubscription;
-  public currentQuestionFromSelectedPoll;
 
   constructor(private questionService: QuestionService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (this.selectedPoll !== undefined) {
       if (this.selectedPoll.hasOwnProperty('questions')) {
-        this.currentQuestionFromSelectedPoll = this.selectedPoll.questions.filter(ques => ques.id === this.currentQuestion.id)[0];
-        if (this.currentQuestionFromSelectedPoll.hasOwnProperty('info')) {
-          this.title = this.currentQuestionFromSelectedPoll.info.title;
-          const options = this.currentQuestionFromSelectedPoll.info.options;
+        const currentQuestionFromSelectedPoll = this.selectedPoll.questions.filter(ques => ques.id === this.currentQuestion.id)[0];
+        if (currentQuestionFromSelectedPoll.hasOwnProperty('info')) {
+          this.title = currentQuestionFromSelectedPoll.info.title;
+          const options = currentQuestionFromSelectedPoll.info.options;
           if (Object.keys(options).length > 0) {
             for (const key in options) {
               if (options.hasOwnProperty(key)) {
@@ -50,27 +49,28 @@ export class QuestionComponent implements OnInit, OnDestroy {
         }
       }
     }
-        this.intervalSubscription =
+    this.intervalSubscription =
       this.interval$.subscribe(() => {
-          const outputQuestion = {
-            id: this.currentQuestion.id,
-            info: this.questionFormGroup.value,
-            image: this.currentQuestion.image
-          };
-          this.questionData.emit(outputQuestion);
+        const outputQuestion = {
+          id: this.currentQuestion.id,
+          info: this.questionFormGroup.value,
+          image: this.currentQuestion.image
+        };
+        this.questionData.emit(outputQuestion);
       });
   }
+
   ngOnDestroy() {
     this.intervalSubscription.unsubscribe();
   }
 
-  addOption() {
+  addOption(): void {
     const currentOption = this.questionService.addOption(this.options);
     this.options.push(currentOption);
     this.optionsFormGroup.addControl(currentOption.id, new FormControl(''));
   }
 
-  deleteQuestion() {
+  deleteQuestion(): void {
     this.deletedElement.emit();
   }
 

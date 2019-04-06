@@ -1,33 +1,38 @@
 <section class="questions-section">
   <div class="form">
-    <div  [formGroup]="pollsHeader" class="title-inputs">
+    <div [formGroup]="pollsHeaderFormGroup" class="title-inputs">
       <input formControlName="title" [value]="title || ''" placeholder="Enter your title" class="title">
-      <input formControlName="description" [value]="description || ''" placeholder="Enter your description" class="description">
+      <input formControlName="description" [value]="description || ''" placeholder="Enter your description"
+             class="description">
     </div>
     <p *ngFor="let question of questions">
-      <app-question [selectedPoll]="pollData" [currentQuestion]="question" (questionData)="addPollToLocalStorage($event)" [questionType]="question.image"
+      <app-question [selectedPoll]="pollData" [currentQuestion]="question"
+                    (questionData)="addPollToLocalStorage($event)" [questionType]="question.image"
                     (deletedElement)="deleteQuestion(question, questions)">
       </app-question>
     </p>
     <button *ngIf="typeBarState !== true else questionType"
             (click)="openQuestionTypeBar()"
             mat-raised-button color="primary"
-    >Add question</button>
+    >Add question
+    </button>
   </div>
 </section>
+
+
 <ng-template #questionType>
   <div class="question-type-menu">
-      <img (click)="closeQuestionTypeBar()" class="left-arrow" src="../../assets/icons/left-arrow.svg" alt="left-arrow">
+    <img (click)="closeQuestionTypeBar()" class="left-arrow" src="../../../../../assets/icons/left-arrow.svg" alt="left-arrow">
     <div (click)="addQuestion($event)" class="button-type">
-      <img id="single" class="icons" src="../../assets/icons/radio-on-button.svg" alt="radio-button">
+      <img id="single" class="icons" src="../../../../../assets/icons/radio-on-button.svg" alt="radio-button">
       <span>One answer</span>
     </div>
     <div (click)="addQuestion($event)" class="button-type">
-      <img id="multiple" class="icons" src="../../assets/icons/checked.svg" alt="checkbox">
+      <img id="multiple" class="icons" src="../../../../../assets/icons/checked.svg" alt="checkbox">
       <span>Multiple answers</span>
     </div>
     <div (click)="addQuestion($event)" class="button-type">
-      <img id="text" class="icons" src="../../assets/icons/edit-text.svg" alt="text">
+      <img id="text" class="icons" src="../../../../../assets/icons/edit-text.svg" alt="text">
       <span>Text</span>
     </div>
   </div>

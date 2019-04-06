@@ -1,4 +1,4 @@
-@import "../../assets/variables";
+@import "../../../assets/variables";
 .welcome-page {
   display: flex;
   height: 100vh;
@@ -8,7 +8,7 @@
   background-color: $darkblue;
 }
 .logo {
-  background: url("../../assets/images/linkedin_banner_image_1.png") top no-repeat;
+  background: url("../../../assets/images/linkedin_banner_image_1.png") top no-repeat;
   background-size: 75%;
   height: 45vh;
   width: 50vw;

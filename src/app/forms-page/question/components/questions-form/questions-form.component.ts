@@ -1,10 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {QuestionService} from '../question.service';
-import {QuestionTypeService} from '../question-type.service';
+import {QuestionService} from '../../services/question.service';
+import {QuestionTypeService} from '../../services/question-type.service';
 import {FormControl, FormGroup} from '@angular/forms';
-import {PollsListService} from '../polls-list.service';
+import {PollsListService} from '../../services/polls-list.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {interval} from 'rxjs';
 
 @Component({
   selector: 'app-questions',
@@ -12,15 +11,15 @@ import {interval} from 'rxjs';
   styleUrls: ['./questions-form.component.scss']
 })
 export class QuestionsFormComponent implements OnInit {
-  public title;
-  public description;
+  public title: string;
+  public description: string;
   public polls;
   public pollData;
   public localStoragePollData;
   public questions;
   public typeBarState;
   public image = '';
-  public pollsHeader = new FormGroup({
+  public pollsHeaderFormGroup = new FormGroup({
     title: new FormControl(''),
     description: new FormControl('')
   });
@@ -53,49 +52,41 @@ export class QuestionsFormComponent implements OnInit {
   }
 
 
-  initializePollData(pollData) {
+  initializePollData(pollData): void {
     this.questions = pollData.questions;
     this.title = pollData.pollTitle;
     this.description = pollData.pollDescription;
-    this.pollsHeader.setValue({
+    this.pollsHeaderFormGroup.setValue({
       title: pollData.pollTitle,
       description: pollData.pollDescription
     });
   }
+
   addPollToLocalStorage(questionData) {
     const localStorageData = JSON.parse(localStorage.getItem('poll'));
-    let found = false;
     if (this.questionsData.length === 0) {
       this.questionsData.push(questionData);
     } else {
-      this.questionsData = this.questionsData.map(question => {
-        if (question.id === questionData.id) {
-          found = true;
-          return questionData;
-        } else {
-          return question;
-        }
-      });
-      if (found === false) {
+      this.questionsData = this.questionsData.map(question => question.id === questionData.id ? questionData : question);
+      if (this.questionsData.length === 0) {
         this.questionsData.push(questionData);
       }
     }
     const updatedPolls = localStorageData.map(poll => {
-        if (this.pollData.id === poll.id) {
-          return {
-            id: poll.id,
-            pollTitle: this.pollsHeader.value.title || 'untitled',
-            pollDescription: this.pollsHeader.value.description,
-            questions: this.questionsData
-          };
-        } else {
-          return poll;
-        }
+      if (this.pollData.id === poll.id) {
+        return {
+          id: poll.id,
+          pollTitle: this.pollsHeaderFormGroup.value.title || 'untitled',
+          pollDescription: this.pollsHeaderFormGroup.value.description,
+          questions: this.questionsData
+        };
+      }
+      return poll;
     });
     localStorage.setItem('poll', JSON.stringify(updatedPolls));
   }
 
-  checkType(questionType) {
+  checkType(questionType): void {
     if (questionType === 'One answer') {
       this.image = this.imgForSingle;
     } else if (questionType === 'Multiple answers') {
@@ -105,7 +96,7 @@ export class QuestionsFormComponent implements OnInit {
     }
   }
 
-  addQuestion(e) {
+  addQuestion(e): void {
     const questionType = e.target.textContent;
     this.checkType(questionType);
     const currentQuestion = this.questionService.addQuestion(this.questions);
@@ -114,30 +105,22 @@ export class QuestionsFormComponent implements OnInit {
     this.closeQuestionTypeBar();
   }
 
-  deleteQuestion(currentQuestion, questionsArray) {
+  deleteQuestion(currentQuestion, questionsArray): void {
     this.questions = this.questionService.deleteElement(currentQuestion, questionsArray);
     let localStorageData = JSON.parse(localStorage.getItem('poll'));
     const pollData = localStorageData.filter(poll => poll.id === this.pollData.id)[0];
-    pollData.questions = pollData.questions.filter(question => {
-      if (currentQuestion.id !== question.id) {
-        return question;
-      }
-    });
-    localStorageData = localStorageData.map(poll => {
-      if (poll.id === pollData.id) {
-        return pollData;
-      } else {
-        return poll;
-      }
-    });
+    pollData.questions = pollData.questions.filter(question => currentQuestion.id !== question.id);
+
+    localStorageData = localStorageData.map(poll => poll.id === pollData.id ? pollData : poll);
+
     localStorage.setItem('poll', JSON.stringify(localStorageData));
   }
 
-  openQuestionTypeBar() {
+  openQuestionTypeBar(): void {
     this.questionTypeService.openQuestionTypeBar();
   }
 
-  closeQuestionTypeBar() {
+  closeQuestionTypeBar(): void {
     this.questionTypeService.closeQuestionTypeBar();
   }
 }

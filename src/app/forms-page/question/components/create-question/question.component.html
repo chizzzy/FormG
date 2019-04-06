@@ -1,6 +1,6 @@
 <section class="question-new">
   <div class="panel">
-    <img (click)="deleteQuestion()" class="delete-icon" src="../../assets/icons/garbage.svg" alt="garbage">
+    <img (click)="deleteQuestion()" class="delete-icon" src="../../../../../assets/icons/garbage.svg" alt="garbage">
   </div>
   <div [formGroup]="questionFormGroup" class="question-options-block">
     <input [value]="title || ''" formControlName="title" class="question-title" placeholder="Enter title of your question">
@@ -8,7 +8,7 @@
       <li *ngFor="let option of options">
         <img class="type-icon" [src]="currentQuestion.image || image" alt="type">
         <input [formControlName]="option.id" class="option" [value]="option.title || ''" placeholder="Enter option">
-        <img (click)="deleteOption(option, options)" class="delete-icon" src="../../assets/icons/garbage.svg" alt="garbage">
+        <img (click)="deleteOption(option, options)" class="delete-icon" src="../../../../../assets/icons/garbage.svg" alt="garbage">
       </li>
     </ul>
     <button (click)="addOption()" mat-raised-button color="primary">Add option</button>

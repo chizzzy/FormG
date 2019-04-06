@@ -10,10 +10,10 @@ export class PollsListService {
   private formsPageStateSource = new Subject();
   public formsPageState$ = this.formsPageStateSource.asObservable();
   constructor() { }
-  openPoll(poll) {
+  openPoll(poll): void {
     this.pollDataSubject.next(poll);
   }
-  createPoll(polls) {
+  createPoll(polls): void {
     let poll;
     if (polls.length === 0) {
       poll = {id: 1};

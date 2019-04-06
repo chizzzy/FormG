@@ -1,18 +1,21 @@
-@import "../../assets/variables";
+@import "../../../../assets/variables";
 
 button {
   background-color: white;
 }
 
 .image {
-  width: 160px;
-  height: 157px;
+  width: 157px;
+  height: 153px;
+  position: relative;
+}
+.image-wrapper {
   cursor: pointer;
 }
 
 .navbar {
   background-color: $darkblue;
-  height: 10vh;
+  height: 12vh;
   display: flex;
   justify-content: center;
 }
