@@ -38,20 +38,21 @@ export class QuestionsFormComponent implements OnInit {
       this.typeBarState = typeBarState;
     });
     const pollId = this.router.url.match(/\d+/);
-    if (pollId === null) {
-      this.pollData = {id: 1};
-      this.questions = [];
-      return;
+    if (pollId !== null) {
+      this.localStoragePollData = JSON.parse(localStorage.getItem('poll')).filter(poll => poll.id === parseInt(pollId[0], 10));
+      if (this.localStoragePollData.length > 0) {
+        this.pollData = this.localStoragePollData[0];
+        this.initializePollData(this.pollData);
+        return;
+      }
     }
-    this.localStoragePollData = JSON.parse(localStorage.getItem('poll')).filter(poll => poll.id === parseInt(pollId[0], 10));
-    if (this.localStoragePollData.length > 0) {
-      this.pollData = this.localStoragePollData;
-      this.initializePollData(this.pollData[0]);
-      return;
-    }
-    this.localStoragePollData = JSON.parse(localStorage.getItem('poll'));
-    this.pollData = this.route.snapshot.data.resolveData;
-    this.initializePollData(this.pollData[0]);
+    this.questions = [];
+    this.pollsListService.pollData$.subscribe(poll => {
+      this.pollData = poll;
+    });
+    // this.localStoragePollData = JSON.parse(localStorage.getItem('poll'));
+    // this.pollData = this.route.snapshot.data.resolveData;
+    // this.initializePollData(this.pollData[0]);
   }
 
 
@@ -86,7 +87,7 @@ export class QuestionsFormComponent implements OnInit {
         if (this.pollData.id === poll.id) {
           return {
             id: poll.id,
-            pollTitle: this.pollsHeader.value.title,
+            pollTitle: this.pollsHeader.value.title || 'untitled',
             pollDescription: this.pollsHeader.value.description,
             questions: this.questionsData
           };

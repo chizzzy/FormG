@@ -5,7 +5,7 @@
       <input formControlName="description" [value]="description || ''" placeholder="Enter your description" class="description">
     </div>
     <p *ngFor="let question of questions">
-      <app-question [selectedPoll]="pollData[0]" [currentQuestion]="question" (questionData)="addPollToLocalStorage($event)" [questionType]="question.image"
+      <app-question [selectedPoll]="pollData" [currentQuestion]="question" (questionData)="addPollToLocalStorage($event)" [questionType]="question.image"
                     (deletedElement)="deleteQuestion(question, questions)">
       </app-question>
     </p>

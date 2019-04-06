@@ -31,24 +31,26 @@ export class QuestionComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (this.selectedPoll.hasOwnProperty('questions')) {
-      this.currentQuestionFromSelectedPoll = this.selectedPoll.questions.filter(ques => ques.id === this.currentQuestion.id)[0];
-      if (this.currentQuestionFromSelectedPoll.hasOwnProperty('info')) {
-        this.title = this.currentQuestionFromSelectedPoll.info.title;
-        const options = this.currentQuestionFromSelectedPoll.info.options;
-        if (Object.keys(options).length > 0) {
-          for (const key in options) {
-            if (options.hasOwnProperty(key)) {
-              this.options.push({id: key, title: options[key]});
-              this.optionsFormGroup.addControl(key, new FormControl(''));
-              this.optionsFormGroup.patchValue({[key]: options[key]});
-              this.questionFormGroup.patchValue({title: this.title});
+    if (this.selectedPoll !== undefined) {
+      if (this.selectedPoll.hasOwnProperty('questions')) {
+        this.currentQuestionFromSelectedPoll = this.selectedPoll.questions.filter(ques => ques.id === this.currentQuestion.id)[0];
+        if (this.currentQuestionFromSelectedPoll.hasOwnProperty('info')) {
+          this.title = this.currentQuestionFromSelectedPoll.info.title;
+          const options = this.currentQuestionFromSelectedPoll.info.options;
+          if (Object.keys(options).length > 0) {
+            for (const key in options) {
+              if (options.hasOwnProperty(key)) {
+                this.options.push({id: key, title: options[key]});
+                this.optionsFormGroup.addControl(key, new FormControl(''));
+                this.optionsFormGroup.patchValue({[key]: options[key]});
+                this.questionFormGroup.patchValue({title: this.title});
+              }
             }
           }
         }
       }
     }
-    this.intervalSubscription =
+        this.intervalSubscription =
       this.interval$.subscribe(() => {
           const outputQuestion = {
             id: this.currentQuestion.id,
