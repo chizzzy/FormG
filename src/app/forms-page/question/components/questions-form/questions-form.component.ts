@@ -39,7 +39,7 @@ export class QuestionsFormComponent implements OnInit {
     const pollId = this.router.url.match(/\d+/);
     if (pollId !== null) {
       this.localStoragePollData = JSON.parse(localStorage.getItem('poll')).filter(poll => poll.id === parseInt(pollId[0], 10));
-      if (!(this.localStoragePollData).hasOwnProperty('title')) {
+      if (!(this.localStoragePollData[0].hasOwnProperty('pollTitle'))) {
         this.questions = [];
         this.title = 'untitled';
         this.description = '';
@@ -48,6 +48,7 @@ export class QuestionsFormComponent implements OnInit {
           description: this.description
         });
         this.pollData = this.localStoragePollData[0];
+        console.log(this.pollData);
         return;
       }
       if (this.localStoragePollData.length > 0) {
