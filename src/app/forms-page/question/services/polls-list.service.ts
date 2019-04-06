@@ -25,5 +25,11 @@ export class PollsListService {
     localStorage.setItem('poll', JSON.stringify(polls));
     this.pollDataSubject.next(poll);
   }
+  deletePoll(poll){
+    const polls = JSON.parse(localStorage.getItem('poll'));
+    const updatedPolls = polls.filter(localStoragePoll => localStoragePoll.id !== poll.id);
+    localStorage.setItem('poll', JSON.stringify(updatedPolls));
+    return updatedPolls;
+  }
 
 }

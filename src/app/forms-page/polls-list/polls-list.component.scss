@@ -10,6 +10,24 @@
   justify-content: flex-start;
   flex-wrap: wrap;
 }
+.dot {
+  padding:10px;
+}
+.dots-square {
+  height: 100%;
+  margin-right: 10px;
+}
+.dots-square:hover {
+  background-color: black;
+  opacity: 0.7;
+}
+.title {
+  margin-left: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 70%;
+}
 .description {
   margin-top: 15px;
   margin-left: 15px;
@@ -27,7 +45,7 @@
   height: 200px;
   margin-top: 35px;
   margin-left: 50px;
-  width: 18vw;
+  width: 23vw;
   background-color: #F3F3F3;
   cursor: pointer;
   border: 1.5px solid white;
@@ -39,9 +57,18 @@
 .header {
   color: #fff;
   display: flex;
-  justify-content: center;
   align-items: center;
   background-color: $darkblue;
+  justify-content: space-between;
   width: 100%;
-  height: 30%;
+  height: auto;
+  min-height: 30%;
+}
+.mat-raised-button.mat-primary {
+  background-color: $darkblue;
+  font-size: 20px;
+  margin-top: 20px;
+  padding: 10px 60px;
+  margin-left: 20px;
+  margin-bottom: 50px;
 }

@@ -22,5 +22,8 @@ export class PollsListComponent implements OnInit {
   createPoll(polls) {
     this.pollsListService.createPoll(polls);
   }
+  deletePoll(poll) {
+    this.polls = this.pollsListService.deletePoll(poll);
+  }
 
 }
