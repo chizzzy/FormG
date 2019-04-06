@@ -6,10 +6,10 @@
              class="description">
     </div>
     <p *ngFor="let question of questions">
-      <app-question [selectedPoll]="pollData" [currentQuestion]="question"
+      <app-create-question [selectedPoll]="pollData" [currentQuestion]="question"
                     (questionData)="addPollToLocalStorage($event)" [questionType]="question.image"
                     (deletedElement)="deleteQuestion(question, questions)">
-      </app-question>
+      </app-create-question>
     </p>
     <button *ngIf="typeBarState !== true else questionType"
             (click)="openQuestionTypeBar()"

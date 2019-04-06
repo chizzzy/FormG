@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {QuestionComponent} from './components/create-question/question.component';
+import {CreateQuestionComponent} from './components/create-question/create-question.component';
 import {QuestionsFormComponent} from './components/questions-form/questions-form.component';
 import {PollsListService} from './services/polls-list.service';
 import {QuestionService} from './services/question.service';
@@ -14,7 +14,7 @@ import {PollsListComponent} from '../polls-list/polls-list.component';
 
 @NgModule({
   declarations: [
-    QuestionComponent,
+    CreateQuestionComponent,
     QuestionsFormComponent,
     FormsViewComponent,
     ContentTabComponent,

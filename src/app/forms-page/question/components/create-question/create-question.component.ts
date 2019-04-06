@@ -4,11 +4,11 @@ import {interval} from 'rxjs';
 import {FormControl, FormGroup} from '@angular/forms';
 
 @Component({
-  selector: 'app-question',
-  templateUrl: './question.component.html',
-  styleUrls: ['./question.component.scss']
+  selector: 'app-create-question',
+  templateUrl: './create-question.component.html',
+  styleUrls: ['./create-question.component.scss']
 })
-export class QuestionComponent implements OnInit, OnDestroy {
+export class CreateQuestionComponent implements OnInit, OnDestroy {
   public options = [];
   @Output() deletedElement = new EventEmitter();
   @Output() questionData = new EventEmitter();

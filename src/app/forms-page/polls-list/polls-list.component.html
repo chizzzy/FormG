@@ -1,14 +1,16 @@
 <section class="wrapper">
 <app-navbar></app-navbar>
-  <div class="polls-list">
-    <ul>
-      <li *ngFor="let poll of polls">
-        <div [routerLink]="poll.id" (click)="openPoll(poll)" class="poll">
+  <div class="poll-block">
+    <ul class="polls-list">
+      <li [routerLink]="poll.id" (click)="openPoll(poll)" class="poll" *ngFor="let poll of polls">
+        <div class="header">
           <h1>{{poll.pollTitle}}</h1>
+        </div>
+        <div class="description">
           <h2>{{poll.pollDescription}}</h2>
         </div>
       </li>
     </ul>
-    <button routerLink="create" (click)="createPoll(polls)" mat-raised-button color="primary">Add poll</button>
+    <!--<button routerLink="create" (click)="createPoll(polls)" mat-raised-button color="primary">Add poll</button>-->
   </div>
 </section>
