@@ -50,9 +50,6 @@ export class QuestionsFormComponent implements OnInit {
     this.pollsListService.pollData$.subscribe(poll => {
       this.pollData = poll;
     });
-    // this.localStoragePollData = JSON.parse(localStorage.getItem('poll'));
-    // this.pollData = this.route.snapshot.data.resolveData;
-    // this.initializePollData(this.pollData[0]);
   }
 
 
