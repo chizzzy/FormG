@@ -39,6 +39,17 @@ export class QuestionsFormComponent implements OnInit {
     const pollId = this.router.url.match(/\d+/);
     if (pollId !== null) {
       this.localStoragePollData = JSON.parse(localStorage.getItem('poll')).filter(poll => poll.id === parseInt(pollId[0], 10));
+      if (!(this.localStoragePollData).hasOwnProperty('title')) {
+        this.questions = [];
+        this.title = 'untitled';
+        this.description = '';
+        this.pollsHeaderFormGroup.setValue({
+          title: this.title,
+          description: this.description
+        });
+        this.pollData = this.localStoragePollData[0];
+        return;
+      }
       if (this.localStoragePollData.length > 0) {
         this.pollData = this.localStoragePollData[0];
         this.initializePollData(this.pollData);
@@ -49,6 +60,7 @@ export class QuestionsFormComponent implements OnInit {
     this.pollsListService.pollData$.subscribe(poll => {
       this.pollData = poll;
     });
+    console.log(this.pollData);
   }
 
 

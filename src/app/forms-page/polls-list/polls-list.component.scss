@@ -13,14 +13,24 @@
 .dot {
   padding:10px;
 }
-.dots-square {
-  height: 100%;
+.delete-icon {
+  height: 20px;
+  width: 20px;
+  cursor: pointer;
   margin-right: 10px;
 }
-.dots-square:hover {
-  background-color: black;
-  opacity: 0.7;
+.delete-icon:hover {
+  height: 25px;
+  width: 25px;
 }
+//.dots-square {
+//  height: 100%;
+//  margin-right: 10px;
+//}
+//.dots-square:hover {
+//  background-color: black;
+//  opacity: 0.7;
+//}
 .title {
   margin-left: 10px;
   text-overflow: ellipsis;
