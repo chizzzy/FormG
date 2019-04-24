@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {QuestionService} from '../../services/question.service';
 import {QuestionTypeService} from '../../services/question-type.service';
 import {FormControl, FormGroup} from '@angular/forms';
@@ -10,7 +10,8 @@ import {ActivatedRoute, Router} from '@angular/router';
   templateUrl: './questions-form.component.html',
   styleUrls: ['./questions-form.component.scss']
 })
-export class QuestionsFormComponent implements OnInit {
+export class QuestionsFormComponent implements OnInit, OnDestroy {
+  public subscription;
   public title: string;
   public description: string;
   public polls;
@@ -36,9 +37,9 @@ export class QuestionsFormComponent implements OnInit {
     this.questionTypeService.questionTypeBar$.subscribe(typeBarState => {
       this.typeBarState = typeBarState;
     });
-    const pollId = this.router.url.match(/\d+/);
-    if (pollId !== null) {
-      this.localStoragePollData = JSON.parse(localStorage.getItem('poll')).filter(poll => poll.id === parseInt(pollId[0], 10));
+    const pollId = +this.route.snapshot.paramMap.get('id');
+    if (!isNaN(pollId)) {
+      this.localStoragePollData = JSON.parse(localStorage.getItem('poll')).filter(poll => poll.id === pollId);
       if (!(this.localStoragePollData[0].hasOwnProperty('pollTitle'))) {
         this.questions = [];
         this.title = 'untitled';
@@ -48,7 +49,6 @@ export class QuestionsFormComponent implements OnInit {
           description: this.description
         });
         this.pollData = this.localStoragePollData[0];
-        console.log(this.pollData);
         return;
       }
       if (this.localStoragePollData.length > 0) {
@@ -58,12 +58,15 @@ export class QuestionsFormComponent implements OnInit {
       }
     }
     this.questions = [];
-    this.pollsListService.pollData$.subscribe(poll => {
+    this.subscription = this.pollsListService.pollData$.subscribe(poll => {
       this.pollData = poll;
     });
-    console.log(this.pollData);
   }
-
+  ngOnDestroy(): void {
+    if (!!this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
 
   initializePollData(pollData): void {
     this.questions = pollData.questions;
@@ -77,13 +80,19 @@ export class QuestionsFormComponent implements OnInit {
 
   addPollToLocalStorage(questionData) {
     const localStorageData = JSON.parse(localStorage.getItem('poll'));
-    if (this.questionsData.length === 0) {
-      this.questionsData.push(questionData);
+    let questions;
+    const localStoragePollData = localStorageData.filter(poll => this.pollData.id === poll.id)[0];
+    if (localStoragePollData.hasOwnProperty('questions')) {
+      questions = localStoragePollData.questions;
     } else {
-      this.questionsData = this.questionsData.map(question => question.id === questionData.id ? questionData : question);
-      if (this.questionsData.length === 0) {
-        this.questionsData.push(questionData);
-      }
+      questions = [];
+    }
+    if (questions.length === 0) {
+      questions.push(questionData);
+    } else if (questions.find(question => question.id === questionData.id) === undefined) {
+      questions.push(questionData);
+    } else {
+      questions = questions.map(question => question.id === questionData.id ? questionData : question);
     }
     const updatedPolls = localStorageData.map(poll => {
       if (this.pollData.id === poll.id) {
@@ -91,7 +100,7 @@ export class QuestionsFormComponent implements OnInit {
           id: poll.id,
           pollTitle: this.pollsHeaderFormGroup.value.title || 'untitled',
           pollDescription: this.pollsHeaderFormGroup.value.description,
-          questions: this.questionsData
+          questions: questions
         };
       }
       return poll;
@@ -125,7 +134,6 @@ export class QuestionsFormComponent implements OnInit {
     pollData.questions = pollData.questions.filter(question => currentQuestion.id !== question.id);
 
     localStorageData = localStorageData.map(poll => poll.id === pollData.id ? pollData : poll);
-
     localStorage.setItem('poll', JSON.stringify(localStorageData));
   }
 

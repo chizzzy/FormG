@@ -9,7 +9,7 @@ import {CoreModule} from './core/core.module';
 @NgModule({
   declarations: [
     AppComponent,
-    WelcomePageComponent
+    WelcomePageComponent,
   ],
   imports: [
     BrowserModule,

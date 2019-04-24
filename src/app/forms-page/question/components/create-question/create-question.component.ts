@@ -30,12 +30,20 @@ export class CreateQuestionComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (this.selectedPoll !== undefined) {
+    const now = JSON.parse(localStorage.getItem('poll')).filter(poll => poll.id == 1)[0];
+    fetch('http://localhost:3000/gg', {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(now)
+    });
+    if (!!this.selectedPoll) {
       if (this.selectedPoll.hasOwnProperty('questions')) {
         const currentQuestionFromSelectedPoll = this.selectedPoll.questions.filter(ques => ques.id === this.currentQuestion.id)[0];
-        if (currentQuestionFromSelectedPoll.hasOwnProperty('info')) {
-          this.title = currentQuestionFromSelectedPoll.info.title;
-          const options = currentQuestionFromSelectedPoll.info.options;
+        if (currentQuestionFromSelectedPoll.hasOwnProperty('options')) {
+          this.title = currentQuestionFromSelectedPoll.title;
+          const options = currentQuestionFromSelectedPoll.options;
           if (Object.keys(options).length > 0) {
             for (const key in options) {
               if (options.hasOwnProperty(key)) {
@@ -53,7 +61,8 @@ export class CreateQuestionComponent implements OnInit, OnDestroy {
       this.interval$.subscribe(() => {
         const outputQuestion = {
           id: this.currentQuestion.id,
-          info: this.questionFormGroup.value,
+          title: this.questionFormGroup.value.title,
+          options: this.questionFormGroup.value.options,
           image: this.currentQuestion.image
         };
         this.questionData.emit(outputQuestion);

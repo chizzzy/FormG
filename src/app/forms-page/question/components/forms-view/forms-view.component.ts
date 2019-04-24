@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PollsListService} from '../../services/polls-list.service';
 
 @Component({
@@ -8,7 +8,9 @@ import {PollsListService} from '../../services/polls-list.service';
 })
 export class FormsViewComponent implements OnInit {
   public formsPageState;
-  constructor(private pollsListService: PollsListService) { }
+
+  constructor(private pollsListService: PollsListService) {
+  }
 
   ngOnInit() {
 

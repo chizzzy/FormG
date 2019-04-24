@@ -1,5 +1,5 @@
 <section class="wrapper">
-<app-navbar></app-navbar>
+  <app-navbar></app-navbar>
   <div class="poll-block">
     <ul class="polls-list">
       <li [routerLink]="poll.id" (click)="openPoll(poll)" class="poll" *ngFor="let poll of polls">
@@ -7,7 +7,6 @@
           <h1 class="title">{{poll.pollTitle || 'Untitled'}}</h1>
           <div (click)="deletePoll(poll)" class="dots-square">
             <img class="delete-icon" src="../../../assets/icons/garbage-white.svg" alt="garbage">
-            <!--<h1 class="dot">. . .</h1>-->
           </div>
         </div>
         <div class="description">
