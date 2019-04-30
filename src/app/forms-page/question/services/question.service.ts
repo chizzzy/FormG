@@ -5,15 +5,28 @@ import {Injectable} from '@angular/core';
 })
 export class QuestionService {
   constructor() { }
-  deleteElement(currentElement, elementsArray) {
-    elementsArray = elementsArray.filter(elem => {
-      if (currentElement.id !== elem.id ) {
-        return elem.id;
-      }
-    });
+  deleteElement(currentElement, elementsArray, questionId) {
+    const pollFromLocalStorage = JSON.parse(localStorage.getItem('poll'));
+    elementsArray = elementsArray.filter(elem => currentElement.id !== elem.id);
     for (let i = 0; i < elementsArray.length; i++) {
       elementsArray[i].id = i + 1;
     }
+    if (currentElement.hasOwnProperty('image')) {
+      pollFromLocalStorage.questions = elementsArray;
+    } else {
+      console.log(pollFromLocalStorage)
+      pollFromLocalStorage.questions.map(question => {
+        if (question.id == questionId) {
+          question.options = elementsArray;
+          return question;
+        } else {
+          return question;
+        }
+      });
+      console.log(pollFromLocalStorage)
+    }
+    localStorage.setItem('poll', pollFromLocalStorage);
+
     return elementsArray;
   }
   addOption(optionArray) {

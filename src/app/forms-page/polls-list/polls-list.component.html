@@ -2,15 +2,15 @@
   <app-navbar></app-navbar>
   <div class="poll-block">
     <ul class="polls-list">
-      <li [routerLink]="poll.id" (click)="openPoll(poll)" class="poll" *ngFor="let poll of polls">
+      <li  (click)="openPoll(poll)" class="poll" *ngFor="let poll of polls">
         <div class="header">
-          <h1 class="title">{{poll.pollTitle || 'Untitled'}}</h1>
+          <h1 class="title">{{poll.title || 'Untitled'}}</h1>
           <div (click)="deletePoll(poll)" class="dots-square">
             <img class="delete-icon" src="../../../assets/icons/garbage-white.svg" alt="garbage">
           </div>
         </div>
         <div class="description">
-          <h2>{{poll.pollDescription}}</h2>
+          <h2>{{poll.description}}</h2>
         </div>
       </li>
     </ul>

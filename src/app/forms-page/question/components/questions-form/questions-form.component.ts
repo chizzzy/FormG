@@ -3,7 +3,8 @@ import {QuestionService} from '../../services/question.service';
 import {QuestionTypeService} from '../../services/question-type.service';
 import {FormControl, FormGroup} from '@angular/forms';
 import {PollsListService} from '../../services/polls-list.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
+import {PollsService} from '../../../../core/polls.service';
 
 @Component({
   selector: 'app-questions',
@@ -14,12 +15,9 @@ export class QuestionsFormComponent implements OnInit, OnDestroy {
   public subscription;
   public title: string;
   public description: string;
-  public polls;
   public pollData;
-  public localStoragePollData;
   public questions;
   public typeBarState;
-  public image = '';
   public pollsHeaderFormGroup = new FormGroup({
     title: new FormControl(''),
     description: new FormControl('')
@@ -27,41 +25,36 @@ export class QuestionsFormComponent implements OnInit, OnDestroy {
   public imgForSingle = '../../assets/icons/radio-on-button.svg';
   public imgForMultiple = '../../assets/icons/checked.svg';
   public imgForText = '../../assets/icons/edit-text.svg';
-  public questionsData = [];
 
   constructor(private questionService: QuestionService, private questionTypeService: QuestionTypeService,
-              private pollsListService: PollsListService, private route: ActivatedRoute, private router: Router) {
+              private pollsListService: PollsListService, private route: ActivatedRoute, private pollsService: PollsService) {
   }
 
   ngOnInit() {
     this.questionTypeService.questionTypeBar$.subscribe(typeBarState => {
       this.typeBarState = typeBarState;
     });
-    const pollId = +this.route.snapshot.paramMap.get('id');
-    if (!isNaN(pollId)) {
-      this.localStoragePollData = JSON.parse(localStorage.getItem('poll')).filter(poll => poll.id === pollId);
-      if (!(this.localStoragePollData[0].hasOwnProperty('pollTitle'))) {
-        this.questions = [];
-        this.title = 'untitled';
-        this.description = '';
-        this.pollsHeaderFormGroup.setValue({
-          title: this.title,
-          description: this.description
-        });
-        this.pollData = this.localStoragePollData[0];
-        return;
-      }
-      if (this.localStoragePollData.length > 0) {
-        this.pollData = this.localStoragePollData[0];
-        this.initializePollData(this.pollData);
-        return;
-      }
+    const pollId = this.route.snapshot.paramMap.get('id');
+    if (pollId[0] === '_') {
+      this.pollsService.getPollById(pollId).subscribe(response => {
+        this.pollData = response[0];
+        if (!!this.pollData) {
+          if (!(this.pollData.hasOwnProperty(  'title'))) {
+            this.initializePollData(null);
+          } else {
+            this.initializePollData(this.pollData);
+          }
+        }
+      });
+      // this.pollData = JSON.parse(localStorage.getItem('poll')).filter(poll => poll.id === pollId);
+    } else {
+      this.questions = [];
+      this.subscription = this.pollsListService.pollData$.subscribe(poll => {
+        this.pollData = poll;
+      });
     }
-    this.questions = [];
-    this.subscription = this.pollsListService.pollData$.subscribe(poll => {
-      this.pollData = poll;
-    });
   }
+
   ngOnDestroy(): void {
     if (!!this.subscription) {
       this.subscription.unsubscribe();
@@ -69,72 +62,74 @@ export class QuestionsFormComponent implements OnInit, OnDestroy {
   }
 
   initializePollData(pollData): void {
-    this.questions = pollData.questions;
-    this.title = pollData.pollTitle;
-    this.description = pollData.pollDescription;
-    this.pollsHeaderFormGroup.setValue({
-      title: pollData.pollTitle,
-      description: pollData.pollDescription
-    });
+    if (pollData === null) {
+      this.questions = [];
+      this.title = 'untitled';
+      this.description = '';
+      this.pollsHeaderFormGroup.setValue({
+        title: this.title,
+        description: this.description
+      });
+    } else {
+      this.questions = pollData.questions;
+      this.title = pollData.title;
+      this.description = pollData.description;
+      this.pollsHeaderFormGroup.setValue({
+        title: pollData.title,
+        description: pollData.description
+      });
+    }
   }
 
   addPollToLocalStorage(questionData) {
-    const localStorageData = JSON.parse(localStorage.getItem('poll'));
-    let questions;
-    const localStoragePollData = localStorageData.filter(poll => this.pollData.id === poll.id)[0];
-    if (localStoragePollData.hasOwnProperty('questions')) {
-      questions = localStoragePollData.questions;
+    let pollQuestions;
+    if (this.pollData.hasOwnProperty('questions')) {
+      pollQuestions = this.pollData.questions;
     } else {
-      questions = [];
+      pollQuestions = [];
     }
-    if (questions.length === 0) {
-      questions.push(questionData);
-    } else if (questions.find(question => question.id === questionData.id) === undefined) {
-      questions.push(questionData);
+    if (pollQuestions.length === 0 || (pollQuestions.find(question => question.id === questionData.id)) === undefined) {
+      pollQuestions.push(questionData);
     } else {
-      questions = questions.map(question => question.id === questionData.id ? questionData : question);
+      pollQuestions = pollQuestions.map(question => question.id === questionData.id ? questionData : question);
     }
-    const updatedPolls = localStorageData.map(poll => {
-      if (this.pollData.id === poll.id) {
-        return {
-          id: poll.id,
-          pollTitle: this.pollsHeaderFormGroup.value.title || 'untitled',
-          pollDescription: this.pollsHeaderFormGroup.value.description,
-          questions: questions
-        };
-      }
-      return poll;
-    });
-    localStorage.setItem('poll', JSON.stringify(updatedPolls));
+    const updatedPoll = {
+      id: this.pollData.id || this.pollsService.generateId(),
+      title: this.pollsHeaderFormGroup.value.title || 'untitled',
+      description: this.pollsHeaderFormGroup.value.description,
+      questions: pollQuestions
+    };
+    localStorage.setItem('poll', JSON.stringify(updatedPoll));
+    if (updatedPoll.hasOwnProperty('questions')) {
+      this.pollsService.updatePollData(updatedPoll).subscribe();
+    }
   }
 
-  checkType(questionType): void {
+  checkType(questionType): string {
     if (questionType === 'One answer') {
-      this.image = this.imgForSingle;
+      return this.imgForSingle;
     } else if (questionType === 'Multiple answers') {
-      this.image = this.imgForMultiple;
+      return this.imgForMultiple;
     } else if (questionType === 'Text') {
-      this.image = this.imgForText;
+      return this.imgForText;
     }
   }
 
   addQuestion(e): void {
     const questionType = e.target.textContent;
-    this.checkType(questionType);
+    console.log(questionType);
+    const image = this.checkType(questionType);
+    console.log(image);
     const currentQuestion = this.questionService.addQuestion(this.questions);
-    currentQuestion.image = this.image;
+    currentQuestion.image = image;
     this.questions.push(currentQuestion);
     this.closeQuestionTypeBar();
   }
 
   deleteQuestion(currentQuestion, questionsArray): void {
-    this.questions = this.questionService.deleteElement(currentQuestion, questionsArray);
-    let localStorageData = JSON.parse(localStorage.getItem('poll'));
-    const pollData = localStorageData.filter(poll => poll.id === this.pollData.id)[0];
-    pollData.questions = pollData.questions.filter(question => currentQuestion.id !== question.id);
-
-    localStorageData = localStorageData.map(poll => poll.id === pollData.id ? pollData : poll);
-    localStorage.setItem('poll', JSON.stringify(localStorageData));
+      this.questions = this.questionService.deleteElement(currentQuestion, questionsArray, 'question');
+      this.pollData.questions = this.pollData.questions.filter(question => currentQuestion.id !== question.id);
+      localStorage.setItem('poll', JSON.stringify(this.pollData));
   }
 
   openQuestionTypeBar(): void {

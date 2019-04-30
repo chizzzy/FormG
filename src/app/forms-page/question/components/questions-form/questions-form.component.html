@@ -6,9 +6,9 @@
              class="description">
     </div>
     <p *ngFor="let question of questions">
-      <app-create-question [selectedPoll]="pollData" [currentQuestion]="question"
-                    (questionData)="addPollToLocalStorage($event)" [questionType]="question.image"
-                    (deletedElement)="deleteQuestion(question, questions)">
+      <app-create-question [currentQuestion]="question"
+                           (questionData)="addPollToLocalStorage($event)"
+                           (deletedElement)="deleteQuestion(question, questions)">
       </app-create-question>
     </p>
     <button *ngIf="typeBarState !== true else questionType"
@@ -19,10 +19,10 @@
   </div>
 </section>
 
-
 <ng-template #questionType>
   <div class="question-type-menu">
-    <img (click)="closeQuestionTypeBar()" class="left-arrow" src="../../../../../assets/icons/left-arrow.svg" alt="left-arrow">
+    <img (click)="closeQuestionTypeBar()" class="left-arrow" src="../../../../../assets/icons/left-arrow.svg"
+         alt="left-arrow">
     <div (click)="addQuestion($event)" class="button-type">
       <img id="single" class="icons" src="../../../../../assets/icons/radio-on-button.svg" alt="radio-button">
       <span>One answer</span>

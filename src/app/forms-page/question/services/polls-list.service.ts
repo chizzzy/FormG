@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
+import {PollsService} from '../../../core/polls.service';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -9,27 +11,25 @@ export class PollsListService {
   public pollData$ = this.pollDataSubject.asObservable();
   private formsPageStateSource = new Subject();
   public formsPageState$ = this.formsPageStateSource.asObservable();
-  constructor() { }
-  openPoll(poll): void {
-    this.pollDataSubject.next(poll);
+
+  constructor(private pollsService: PollsService, private router: Router) {
   }
+
+  openPoll(poll) {
+    localStorage.setItem('poll', JSON.stringify(poll));
+    return this.router.navigateByUrl(`/polls/${poll.id}`);
+  }
+
   createPoll(polls): void {
     let poll;
-    if (polls.length === 0) {
-      poll = {id: 1};
-      polls.push(poll);
-    } else {
-      poll = {id: polls[polls.length - 1].id + 1};
-      polls.push(poll);
-    }
+    poll = {id: this.pollsService.generateId()};
+    polls.push(poll);
     localStorage.setItem('poll', JSON.stringify(polls));
     this.pollDataSubject.next(poll);
   }
+
   deletePoll(poll) {
-    const polls = JSON.parse(localStorage.getItem('poll'));
-    const updatedPolls = polls.filter(localStoragePoll => localStoragePoll.id !== poll.id);
-    localStorage.setItem('poll', JSON.stringify(updatedPolls));
-    return updatedPolls;
+    this.pollsService.deletePollById(poll.id).subscribe();
   }
 
 }

@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angula
 import {QuestionService} from '../../services/question.service';
 import {interval} from 'rxjs';
 import {FormControl, FormGroup} from '@angular/forms';
+import {PollsService} from '../../../../core/polls.service';
 
 @Component({
   selector: 'app-create-question',
@@ -12,10 +13,7 @@ export class CreateQuestionComponent implements OnInit, OnDestroy {
   public options = [];
   @Output() deletedElement = new EventEmitter();
   @Output() questionData = new EventEmitter();
-  @Input() questionType: string;
   @Input() currentQuestion;
-  @Input() selectedPoll;
-  @Input() ques;
   public image;
   public title;
   public optionsFormGroup = new FormGroup({});
@@ -30,41 +28,36 @@ export class CreateQuestionComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const now = JSON.parse(localStorage.getItem('poll')).filter(poll => poll.id == 1)[0];
-    fetch('http://localhost:3000/gg', {
-      method: 'post',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(now)
-    });
-    if (!!this.selectedPoll) {
-      if (this.selectedPoll.hasOwnProperty('questions')) {
-        const currentQuestionFromSelectedPoll = this.selectedPoll.questions.filter(ques => ques.id === this.currentQuestion.id)[0];
-        if (currentQuestionFromSelectedPoll.hasOwnProperty('options')) {
-          this.title = currentQuestionFromSelectedPoll.title;
-          const options = currentQuestionFromSelectedPoll.options;
-          if (Object.keys(options).length > 0) {
-            for (const key in options) {
-              if (options.hasOwnProperty(key)) {
-                this.options.push({id: key, title: options[key]});
-                this.optionsFormGroup.addControl(key, new FormControl(''));
-                this.optionsFormGroup.patchValue({[key]: options[key]});
+        if (!!this.currentQuestion) {
+          if (this.currentQuestion.hasOwnProperty('options')) {
+            this.title = this.currentQuestion.title;
+            this.options = this.currentQuestion.options;
+            if (this.options.length > 0) {
+              this.options.forEach(option => {
+                this.optionsFormGroup.addControl(option.id, new FormControl(''));
+                this.optionsFormGroup.patchValue({[option.id]: option.title});
                 this.questionFormGroup.patchValue({title: this.title});
+              });
               }
             }
-          }
-        }
-      }
-    }
+          } else {}
     this.intervalSubscription =
       this.interval$.subscribe(() => {
+        const optionsObject  = this.questionFormGroup.value.options;
+        const optionsArray = [];
+        for (const key in optionsObject) {
+          if (optionsObject.hasOwnProperty(key)) {
+            optionsArray.push({id: key, title: optionsObject[key]});
+          }
+        }
+        console.log(optionsArray);
         const outputQuestion = {
           id: this.currentQuestion.id,
           title: this.questionFormGroup.value.title,
-          options: this.questionFormGroup.value.options,
+          options: optionsArray,
           image: this.currentQuestion.image
         };
+        console.log(outputQuestion);
         this.questionData.emit(outputQuestion);
       });
   }
@@ -84,8 +77,8 @@ export class CreateQuestionComponent implements OnInit, OnDestroy {
   }
 
   deleteOption(currentElement, options) {
-    this.options = this.questionService.deleteElement(currentElement, options);
     this.optionsFormGroup.removeControl(currentElement.id);
+    this.options = this.questionService.deleteElement(currentElement, options, this.currentQuestion.id);
     return this.options;
   }
 
