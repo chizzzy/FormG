@@ -22,9 +22,7 @@ export class QuestionsFormComponent implements OnInit, OnDestroy {
     title: new FormControl(''),
     description: new FormControl('')
   });
-  public imgForSingle = '../../assets/icons/radio-on-button.svg';
-  public imgForMultiple = '../../assets/icons/checked.svg';
-  public imgForText = '../../assets/icons/edit-text.svg';
+
 
   constructor(private questionService: QuestionService, private questionTypeService: QuestionTypeService,
               private pollsListService: PollsListService, private route: ActivatedRoute, private pollsService: PollsService) {
@@ -39,14 +37,13 @@ export class QuestionsFormComponent implements OnInit, OnDestroy {
       this.pollsService.getPollById(pollId).subscribe(response => {
         this.pollData = response[0];
         if (!!this.pollData) {
-          if (!(this.pollData.hasOwnProperty(  'title'))) {
+          if (!(this.pollData.hasOwnProperty('title'))) {
             this.initializePollData(null);
           } else {
             this.initializePollData(this.pollData);
           }
         }
       });
-      // this.pollData = JSON.parse(localStorage.getItem('poll')).filter(poll => poll.id === pollId);
     } else {
       this.questions = [];
       this.subscription = this.pollsListService.pollData$.subscribe(poll => {
@@ -101,39 +98,43 @@ export class QuestionsFormComponent implements OnInit, OnDestroy {
     };
     localStorage.setItem('poll', JSON.stringify(updatedPoll));
     if (updatedPoll.hasOwnProperty('questions')) {
-      this.pollsService.updatePollData(updatedPoll).subscribe();
+      this.pollsService.updatePollData(updatedPoll).subscribe(() => console.log('valentin'));
     }
   }
 
-  checkType(questionType): string {
-    if (questionType === 'One answer') {
-      return this.imgForSingle;
-    } else if (questionType === 'Multiple answers') {
-      return this.imgForMultiple;
-    } else if (questionType === 'Text') {
-      return this.imgForText;
-    }
-  }
+
 
   addQuestion(e): void {
     const questionType = e.target.textContent;
-    console.log(questionType);
-    const image = this.checkType(questionType);
-    console.log(image);
     const currentQuestion = this.questionService.addQuestion(this.questions);
-    currentQuestion.image = image;
+    currentQuestion.type = questionType;
     this.questions.push(currentQuestion);
     this.closeQuestionTypeBar();
   }
 
   deleteQuestion(currentQuestion, questionsArray): void {
-      this.questions = this.questionService.deleteElement(currentQuestion, questionsArray, 'question');
-      this.pollData.questions = this.pollData.questions.filter(question => currentQuestion.id !== question.id);
-      localStorage.setItem('poll', JSON.stringify(this.pollData));
+    this.questions = this.questionService.deleteElement(currentQuestion, questionsArray, 'question');
+    this.pollData.questions = this.pollData.questions.filter(question => currentQuestion.id !== question.id);
+    localStorage.setItem('poll', JSON.stringify(this.pollData));
   }
 
   openQuestionTypeBar(): void {
     this.questionTypeService.openQuestionTypeBar();
+  }
+
+  copyLinkToVote() {
+    const voteUrl = window.location.href + '/vote';
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = voteUrl;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
   }
 
   closeQuestionTypeBar(): void {

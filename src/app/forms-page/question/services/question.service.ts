@@ -11,10 +11,9 @@ export class QuestionService {
     for (let i = 0; i < elementsArray.length; i++) {
       elementsArray[i].id = i + 1;
     }
-    if (currentElement.hasOwnProperty('image')) {
+    if (currentElement.hasOwnProperty('type')) {
       pollFromLocalStorage.questions = elementsArray;
     } else {
-      console.log(pollFromLocalStorage)
       pollFromLocalStorage.questions.map(question => {
         if (question.id == questionId) {
           question.options = elementsArray;
@@ -38,9 +37,9 @@ export class QuestionService {
   }
   addQuestion(questionArray) {
     if (questionArray.length === 0) {
-      return {id: 1, image: ''};
+      return {id: 1, type: ''};
     }
     const currentId = questionArray.length + 1;
-    return {id: currentId, image: ''};
+    return {id: currentId, type: ''};
   }
 }

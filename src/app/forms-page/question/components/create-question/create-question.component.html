@@ -7,10 +7,14 @@
     <ul [formGroup]="optionsFormGroup" class="options">
       <li *ngFor="let option of options">
         <img class="type-icon" [src]="currentQuestion.image || image" alt="type">
-        <input [formControlName]="option.id" class="option" [value]="option.title || ''" placeholder="Enter option">
+        <input *ngIf="canAddOption else text" [formControlName]="option.id" class="option" [value]="option.title || ''" placeholder="Enter option">
         <img (click)="deleteOption(option, options)" class="delete-icon" src="../../../../../assets/icons/garbage.svg" alt="garbage">
       </li>
     </ul>
-    <button (click)="addOption()" mat-raised-button color="primary">Add option</button>
+    <button *ngIf="canAddOption" (click)="addOption()" mat-raised-button color="primary">Add option</button>
   </div>
 </section>
+
+<ng-template #text>
+  <input placeholder="User should type answer here" disabled="disabled" class="option">
+</ng-template>

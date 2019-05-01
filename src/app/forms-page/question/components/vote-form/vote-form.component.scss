@@ -1,0 +1,80 @@
+@import "../../../../../assets/variables";
+.questions-section {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.form {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50vw;
+  box-shadow: 0 0 11px rgba(0,0,0,.12);
+  background-color: #fff;
+  height: auto;
+  min-height: 50vh;
+  margin-bottom: 50px;
+}
+.poll-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: space-around;
+  padding-top: 35px;
+  padding-bottom: 35px;
+  width: 100%;
+  background-color: $darkblue;
+}
+.question {
+  font-size: 25px;
+}
+.header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 15%;
+  height: 100%;
+  width: 80%;
+  color: #fff;
+}
+.title {
+  font-size: 50px;
+}
+.description {
+  margin-top: 25px;
+  font-size: 24px;
+}
+.answer {
+  display: flex;
+  margin-top: 20px;
+  margin-left: 15px;
+}
+.questions {
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+  width: 80%;
+  margin-bottom: 40px;
+}
+.option-text {
+  font-size: 20px;
+}
+.button-input {
+  margin-top: 3px;
+  margin-right: 10px;
+  height: 15px;
+  width: 15px;
+}
+.text {
+  width: 90%;
+  height: 30px;
+  margin-left: 10px;
+}
+.mat-raised-button.mat-primary {
+  background-color: $darkblue;
+  font-size: 20px;
+  padding: 10px 30px;
+  margin-bottom: 30px;
+}

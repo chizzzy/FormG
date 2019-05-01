@@ -11,11 +11,14 @@
                            (deletedElement)="deleteQuestion(question, questions)">
       </app-create-question>
     </p>
+    <div class="buttons">
     <button *ngIf="typeBarState !== true else questionType"
             (click)="openQuestionTypeBar()"
             mat-raised-button color="primary"
     >Add question
     </button>
+    <button (click)="copyLinkToVote()" mat-raised-button color="primary">Copy vote link</button>
+    </div>
   </div>
 </section>
 

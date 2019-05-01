@@ -52,7 +52,11 @@ textarea:hover, input:hover{
   margin-top: 30px;
   height: 40px;
   width: 70%;
+  margin-bottom: 20px;
   font-size: 14px;
+}
+input[disabled='disabled']{
+  background-color: #fff;
 }
 .delete-icon {
   height: 20px;

@@ -12,6 +12,7 @@ import {ContentTabComponent} from '../views/content-tab/content-tab.component';
 import {NavbarComponent} from '../views/navbar/navbar.component';
 import {PollsListComponent} from '../polls-list/polls-list.component';
 import {VoteFormComponent} from './components/vote-form/vote-form.component';
+import {FormErrorPageComponent} from '../views/form-error-page/form-error-page.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import {VoteFormComponent} from './components/vote-form/vote-form.component';
     ContentTabComponent,
     NavbarComponent,
     PollsListComponent,
-    VoteFormComponent
+    VoteFormComponent,
+    FormErrorPageComponent,
   ],
   imports: [
     CommonModule,

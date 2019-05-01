@@ -1,3 +1,21 @@
-<p>
-  vote-form works!
-</p>
+<section class="questions-section">
+  <div *ngIf="isLoaded" class="form">
+    <header class="poll-header">
+      <div class="header-content">
+        <h1 class="title">{{pollData.title}}</h1>
+        <h4 class="description">{{pollData.description}}</h4>
+      </div>
+    </header>
+    <div *ngFor="let question of questions" class="questions">
+        <h1 class="question">{{question.id}}. {{question.title}}</h1>
+        <div *ngFor="let option of question.options" class="answers">
+            <div class="answer">
+              <input [className]="question.type === 'Text' ? 'text': 'button-input'"
+                     [name]="question.id + question.type" [type]="setTypeOfAnswer(question.type)">
+              <h2 class="option-text">{{option.title}}</h2>
+            </div>
+        </div>
+    </div>
+    <button mat-raised-button color="primary">Submit</button>
+  </div>
+</section>

@@ -51,7 +51,6 @@ textarea:hover, input:hover{
 .mat-raised-button.mat-primary {
   background-color: $darkblue;
   font-size: 20px;
-  margin-top: 20px;
   padding-top: 10px;
   padding-bottom: 10px;
   margin-bottom: 50px;
@@ -68,8 +67,14 @@ textarea:hover, input:hover{
   background-color: $darkblue;
   width: 50%;
   height:60px;
-  margin-top: 20px;
   margin-bottom: 50px;
+}
+.buttons {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 .button-type {
   padding-left: 10px;
