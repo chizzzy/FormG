@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {PollsService} from '../../../../core/polls.service';
 
@@ -11,8 +11,9 @@ export class VoteFormComponent implements OnInit {
   public pollData;
   public questions;
   public isLoaded: boolean;
-  public className;
-  constructor(private route: ActivatedRoute, private pollsService: PollsService) { }
+
+  constructor(private route: ActivatedRoute, private pollsService: PollsService) {
+  }
 
   ngOnInit() {
     const pollId = this.route.snapshot.paramMap.get('id');
@@ -23,7 +24,13 @@ export class VoteFormComponent implements OnInit {
         this.isLoaded = true;
       });
     }
+
   }
+
+  sendAnswer() {
+    this.pollsService.sendAnswer({name: 'test'}, this.pollData.id).subscribe();
+  }
+
   setTypeOfAnswer(questionType) {
     if (questionType === 'One answer') {
       return 'radio';

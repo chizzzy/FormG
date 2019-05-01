@@ -14,7 +14,9 @@ export class PollsService {
   generateId() {
     return '_' + Math.random().toString(36).substr(2, 9);
   }
-
+  sendAnswer(answer, id) {
+    return this.http.post(`http://localhost:3000/polls/${id}`, answer);
+  }
   getPollById(id) {
     return this.http.get(`http://localhost:3000/polls/${id}`);
   }
