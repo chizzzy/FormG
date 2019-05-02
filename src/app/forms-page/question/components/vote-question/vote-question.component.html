@@ -1,0 +1,10 @@
+<div [formGroup]="questionForm" class="questions">
+  <span class="question">{{question.id}}. {{question.title}}</span>
+  <div *ngFor="let option of question.options" class="answers">
+    <div class="answer">
+      <input [formControlName]="option.id" placeholder="Enter your answer" [className]="question.type === 'Text' ? 'text': 'button-input'"
+             [name]="question.id + question.type" [type]="setTypeOfAnswer(question.type)">
+      <span class="option-text">{{option.title}}</span>
+    </div>
+  </div>
+</div>

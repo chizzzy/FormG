@@ -1,0 +1,29 @@
+.answer {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  margin-left: 20px;
+}
+.questions {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  width: 80%;
+  margin-bottom: 30px;
+}
+.option-text {
+  font-size: 14px;
+}
+.button-input {
+  margin-right: 14px;
+  height: 18px;
+  width: 18px;
+}
+.text {
+  width: 90%;
+  height: 30px;
+  margin-left: 10px;
+}
+.question {
+  font-size: 19px;
+}

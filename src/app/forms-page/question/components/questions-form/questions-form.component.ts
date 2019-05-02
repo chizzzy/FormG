@@ -36,6 +36,7 @@ export class QuestionsFormComponent implements OnInit, OnDestroy {
     if (pollId[0] === '_') {
       this.pollsService.getPollById(pollId).subscribe(response => {
         this.pollData = response[0];
+        localStorage.setItem('poll', JSON.stringify(this.pollData));
         if (!!this.pollData) {
           if (!(this.pollData.hasOwnProperty('title'))) {
             this.initializePollData(null);
@@ -96,16 +97,16 @@ export class QuestionsFormComponent implements OnInit, OnDestroy {
       description: this.pollsHeaderFormGroup.value.description,
       questions: pollQuestions
     };
-    localStorage.setItem('poll', JSON.stringify(updatedPoll));
+    console.log(updatedPoll);
     if (updatedPoll.hasOwnProperty('questions')) {
-      this.pollsService.updatePollData(updatedPoll).subscribe(() => console.log('valentin'));
+      this.pollsService.updatePollData(updatedPoll).subscribe();
     }
   }
 
 
-
   addQuestion(e): void {
-    const questionType = e.target.textContent;
+    const questionType = e.target.textContent || e.target.alt;
+    console.log(e);
     const currentQuestion = this.questionService.addQuestion(this.questions);
     currentQuestion.type = questionType;
     this.questions.push(currentQuestion);

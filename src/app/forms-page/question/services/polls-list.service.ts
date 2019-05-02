@@ -16,7 +16,6 @@ export class PollsListService {
   }
 
   openPoll(poll) {
-    localStorage.setItem('poll', JSON.stringify(poll));
     return this.router.navigateByUrl(`/polls/${poll.id}`);
   }
 

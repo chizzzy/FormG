@@ -31,11 +31,10 @@ export class CreateQuestionComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (this.currentQuestion.type === 'Text') {
-      this.canAddOption = false;
-    }
     if (!!this.currentQuestion) {
       this.image = this.checkType(this.currentQuestion.type);
+      console.log(this.currentQuestion);
+      this.checkAddOptionAvailability(this.currentQuestion);
       if (this.currentQuestion.hasOwnProperty('options')) {
         this.title = this.currentQuestion.title;
         this.options = this.currentQuestion.options;
@@ -104,6 +103,13 @@ export class CreateQuestionComponent implements OnInit, OnDestroy {
       return this.imgForMultiple;
     } else if (questionType === 'Text') {
       return this.imgForText;
+    }
+  }
+  checkAddOptionAvailability(question) {
+    if (question.type === 'Text' && (!question.hasOwnProperty('options'))) {
+      this.addOption();
+    } else if (question.type === 'Text' && question.options.length > 0) {
+      this.canAddOption = false;
     }
   }
 

@@ -1,10 +1,16 @@
 import {Injectable} from '@angular/core';
+import {Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuestionService {
+  private pollDataSubject = new Subject();
+  public pollData$ = this.pollDataSubject.asObservable();
   constructor() { }
+  sendPollData(pollData) {
+    this.pollDataSubject.next(pollData);
+  }
   deleteElement(currentElement, elementsArray, questionId) {
     const pollFromLocalStorage = JSON.parse(localStorage.getItem('poll'));
     elementsArray = elementsArray.filter(elem => currentElement.id !== elem.id);
@@ -22,9 +28,8 @@ export class QuestionService {
           return question;
         }
       });
-      console.log(pollFromLocalStorage)
     }
-    localStorage.setItem('poll', pollFromLocalStorage);
+    localStorage.setItem('poll', JSON.stringify(pollFromLocalStorage));
 
     return elementsArray;
   }

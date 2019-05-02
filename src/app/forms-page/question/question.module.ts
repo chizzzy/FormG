@@ -13,6 +13,7 @@ import {NavbarComponent} from '../views/navbar/navbar.component';
 import {PollsListComponent} from '../polls-list/polls-list.component';
 import {VoteFormComponent} from './components/vote-form/vote-form.component';
 import {FormErrorPageComponent} from '../views/form-error-page/form-error-page.component';
+import {VoteQuestionComponent} from './components/vote-question/vote-question.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import {FormErrorPageComponent} from '../views/form-error-page/form-error-page.c
     PollsListComponent,
     VoteFormComponent,
     FormErrorPageComponent,
+    VoteQuestionComponent
   ],
   imports: [
     CommonModule,
