@@ -33,7 +33,6 @@ export class CreateQuestionComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (!!this.currentQuestion) {
       this.image = this.checkType(this.currentQuestion.type);
-      console.log(this.currentQuestion);
       this.checkAddOptionAvailability(this.currentQuestion);
       if (this.currentQuestion.hasOwnProperty('options')) {
         this.title = this.currentQuestion.title;
@@ -56,7 +55,7 @@ export class CreateQuestionComponent implements OnInit, OnDestroy {
             outputQuestion = {
               id: this.currentQuestion.id,
               title: this.questionFormGroup.value.title,
-              options: [{id: 1}],
+              options: [{id: 1, title: ''}],
               type: this.currentQuestion.type
             };
           } else {
@@ -115,7 +114,7 @@ export class CreateQuestionComponent implements OnInit, OnDestroy {
 
   deleteOption(currentElement, options) {
     this.optionsFormGroup.removeControl(currentElement.id);
-    this.options = this.questionService.deleteElement(currentElement, options, this.currentQuestion.id);
+    this.options = this.questionService.deleteElement(currentElement, options);
     if (this.currentQuestion.type === 'Text') {
       this.canAddOption = true;
     }

@@ -20,7 +20,9 @@ export class PollsService {
   getPollById(id) {
     return this.http.get(`http://localhost:3000/polls/${id}`);
   }
-
+  getPollsResultsById(id) {
+    return this.http.get(`http://localhost:3000/polls/${id}/answers`);
+  }
   updatePollData(poll) {
     return this.http.post('http://localhost:3000/polls', poll);
   }

@@ -1,9 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {PollsService} from '../../../../core/polls.service';
-import {QuestionService} from '../../services/question.service';
-import {concat} from 'rxjs';
-import {FormArray, FormGroup} from '@angular/forms';
+import {FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-vote-form',
@@ -14,19 +12,22 @@ export class VoteFormComponent implements OnInit {
   public pollData;
   public questions;
   public isLoaded: boolean;
-  public questionsFormArray = new FormArray([]);
-  public questionsFormGroup = new FormGroup({questions: this.questionsFormArray});
+  public questionsFormGroup = new FormGroup({});
 
-  constructor(private route: ActivatedRoute, private pollsService: PollsService, private questionService: QuestionService) {
+  constructor(private route: ActivatedRoute, private pollsService: PollsService) {
   }
 
   ngOnInit() {
     const pollId = this.route.snapshot.paramMap.get('id');
+    this.pollsService.getPollsResultsById(pollId).subscribe(res => console.log(res));
     if (pollId[0] === '_') {
       this.pollsService.getPollById(pollId).subscribe(response => {
         this.pollData = response[0];
         this.questions = this.pollData.questions || [];
-        this.questions.forEach(question => this.questionsFormArray.setControl(question.id, new FormGroup({})));
+        this.questions.forEach(question => {
+          this.questionsFormGroup.addControl(question.id, new FormGroup({}));
+        });
+        console.log(this.questionsFormGroup);
         this.isLoaded = true;
       });
     }
@@ -34,7 +35,8 @@ export class VoteFormComponent implements OnInit {
   }
 
   sendAnswer() {
-   console.log(this.questionsFormGroup.value);
+    this.pollsService.sendAnswer(this.questionsFormGroup.value, this.pollData.id).subscribe();
+    console.log(this.questionsFormGroup);
   }
 
 }

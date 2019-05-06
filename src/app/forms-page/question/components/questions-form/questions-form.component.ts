@@ -82,7 +82,7 @@ export class QuestionsFormComponent implements OnInit, OnDestroy {
   addPollToLocalStorage(questionData) {
     let pollQuestions;
     if (this.pollData.hasOwnProperty('questions')) {
-      pollQuestions = this.pollData.questions;
+      pollQuestions = this.questions;
     } else {
       pollQuestions = [];
     }
@@ -97,8 +97,8 @@ export class QuestionsFormComponent implements OnInit, OnDestroy {
       description: this.pollsHeaderFormGroup.value.description,
       questions: pollQuestions
     };
-    console.log(updatedPoll);
     if (updatedPoll.hasOwnProperty('questions')) {
+      localStorage.setItem('poll', JSON.stringify(updatedPoll));
       this.pollsService.updatePollData(updatedPoll).subscribe();
     }
   }
@@ -106,7 +106,6 @@ export class QuestionsFormComponent implements OnInit, OnDestroy {
 
   addQuestion(e): void {
     const questionType = e.target.textContent || e.target.alt;
-    console.log(e);
     const currentQuestion = this.questionService.addQuestion(this.questions);
     currentQuestion.type = questionType;
     this.questions.push(currentQuestion);
@@ -114,8 +113,8 @@ export class QuestionsFormComponent implements OnInit, OnDestroy {
   }
 
   deleteQuestion(currentQuestion, questionsArray): void {
-    this.questions = this.questionService.deleteElement(currentQuestion, questionsArray, 'question');
-    this.pollData.questions = this.pollData.questions.filter(question => currentQuestion.id !== question.id);
+    this.questions = this.questionService.deleteElement(currentQuestion, questionsArray);
+    this.pollData.questions = this.questions;
     localStorage.setItem('poll', JSON.stringify(this.pollData));
   }
 

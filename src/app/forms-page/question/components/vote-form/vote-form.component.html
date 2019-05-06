@@ -7,7 +7,7 @@
       </div>
     </header>
     <div *ngFor="let question of questions" class="questions">
-      <app-vote-question [questionForm]="questionsFormArray.controls[question.id]" [question]="question"></app-vote-question>
+      <app-vote-question [questionForm]="questionsFormGroup.controls[question.id]" [question]="question"></app-vote-question>
     </div>
     <button (click)="sendAnswer()" mat-raised-button color="primary">Submit</button>
   </div>

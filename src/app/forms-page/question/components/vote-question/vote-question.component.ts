@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
-import {QuestionService} from '../../services/question.service';
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-vote-question',
@@ -10,13 +9,20 @@ import {QuestionService} from '../../services/question.service';
 export class VoteQuestionComponent implements OnInit {
   @Input() question;
   @Input() questionForm;
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
+
     this.question.options.forEach(option => {
-      this.questionForm.addControl(option.id, new FormControl(''));
-    } );
+      if (this.question.type === 'Text') {
+        this.questionForm.addControl(option.id, new FormControl(''));
+      } else {
+        this.questionForm.addControl(option.id, new FormControl(false));
+      }
+    });
   }
+
   setTypeOfAnswer(questionType) {
     if (questionType === 'One answer') {
       return 'radio';
@@ -24,6 +30,19 @@ export class VoteQuestionComponent implements OnInit {
       return 'checkbox';
     } else {
       return 'text';
+    }
+  }
+
+  onChange(event, optionId) {
+    if (this.question.type === 'One answer') {
+      for (const i in this.questionForm.value) {
+        if (this.questionForm.value.hasOwnProperty(i)) {
+          this.questionForm.patchValue({[i]: false});
+        }
+      }
+      this.questionForm.patchValue({[optionId]: event.srcElement.checked});
+    } else if (this.question.type === 'Multiple answers') {
+      this.questionForm.patchValue({[optionId]: event.srcElement.checked});
     }
   }
 }

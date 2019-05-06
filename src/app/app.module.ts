@@ -5,7 +5,6 @@ import {WelcomePageComponent} from './home/welcome-page/welcome-page.component';
 import {AppRoutingModule} from './app-routing.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreModule} from './core/core.module';
-import { VoteQuestionComponent } from './forms-page/question/components/vote-question/vote-question.component';
 
 @NgModule({
   declarations: [
