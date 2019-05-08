@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {PollsService} from '../../../../core/polls.service';
 import {FormGroup} from '@angular/forms';
 
@@ -14,12 +14,11 @@ export class VoteFormComponent implements OnInit {
   public isLoaded: boolean;
   public questionsFormGroup = new FormGroup({});
 
-  constructor(private route: ActivatedRoute, private pollsService: PollsService) {
+  constructor(private route: ActivatedRoute, private pollsService: PollsService, private router: Router) {
   }
 
   ngOnInit() {
     const pollId = this.route.snapshot.paramMap.get('id');
-    this.pollsService.getPollsResultsById(pollId).subscribe(res => console.log(res));
     if (pollId[0] === '_') {
       this.pollsService.getPollById(pollId).subscribe(response => {
         this.pollData = response[0];
@@ -27,7 +26,6 @@ export class VoteFormComponent implements OnInit {
         this.questions.forEach(question => {
           this.questionsFormGroup.addControl(question.id, new FormGroup({}));
         });
-        console.log(this.questionsFormGroup);
         this.isLoaded = true;
       });
     }
@@ -36,7 +34,7 @@ export class VoteFormComponent implements OnInit {
 
   sendAnswer() {
     this.pollsService.sendAnswer(this.questionsFormGroup.value, this.pollData.id).subscribe();
-    console.log(this.questionsFormGroup);
+    return this.router.navigateByUrl(`/polls/${this.pollData.id}/vote/success`);
   }
 
 }

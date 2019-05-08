@@ -7,7 +7,7 @@ import {ActivatedRoute} from '@angular/router';
 import {PollsService} from '../../../../core/polls.service';
 
 @Component({
-  selector: 'app-questions',
+  selector: 'app-questions-form',
   templateUrl: './questions-form.component.html',
   styleUrls: ['./questions-form.component.scss']
 })
@@ -36,7 +36,6 @@ export class QuestionsFormComponent implements OnInit, OnDestroy {
     if (pollId[0] === '_') {
       this.pollsService.getPollById(pollId).subscribe(response => {
         this.pollData = response[0];
-        localStorage.setItem('poll', JSON.stringify(this.pollData));
         if (!!this.pollData) {
           if (!(this.pollData.hasOwnProperty('title'))) {
             this.initializePollData(null);
@@ -79,10 +78,10 @@ export class QuestionsFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  addPollToLocalStorage(questionData) {
+  addPollToDatabase(questionData) {
     let pollQuestions;
     if (this.pollData.hasOwnProperty('questions')) {
-      pollQuestions = this.questions;
+      pollQuestions = this.pollData.questions;
     } else {
       pollQuestions = [];
     }
@@ -98,7 +97,8 @@ export class QuestionsFormComponent implements OnInit, OnDestroy {
       questions: pollQuestions
     };
     if (updatedPoll.hasOwnProperty('questions')) {
-      localStorage.setItem('poll', JSON.stringify(updatedPoll));
+      this.pollData = updatedPoll;
+      console.log(updatedPoll);
       this.pollsService.updatePollData(updatedPoll).subscribe();
     }
   }
@@ -115,7 +115,6 @@ export class QuestionsFormComponent implements OnInit, OnDestroy {
   deleteQuestion(currentQuestion, questionsArray): void {
     this.questions = this.questionService.deleteElement(currentQuestion, questionsArray);
     this.pollData.questions = this.questions;
-    localStorage.setItem('poll', JSON.stringify(this.pollData));
   }
 
   openQuestionTypeBar(): void {

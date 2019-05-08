@@ -7,7 +7,7 @@
     </div>
     <p *ngFor="let question of questions">
       <app-create-question [currentQuestion]="question"
-                           (questionData)="addPollToLocalStorage($event)"
+                           (questionData)="addPollToDatabase($event)"
                            (deletedElement)="deleteQuestion(question, questions)">
       </app-create-question>
     </p>

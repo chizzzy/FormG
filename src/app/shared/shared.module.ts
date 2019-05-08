@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MatButtonModule, MatSelectModule, MatTabsModule} from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ChartsModule} from 'ng2-charts';
 
 @NgModule({
   declarations: [],
@@ -11,14 +12,16 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     MatSelectModule,
     FormsModule,
     MatButtonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ChartsModule
   ],
   exports: [
     MatTabsModule,
     MatSelectModule,
     FormsModule,
     MatButtonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ChartsModule
   ]
 })
 export class SharedModule {

@@ -38,40 +38,15 @@ export class CreateQuestionComponent implements OnInit, OnDestroy {
         this.title = this.currentQuestion.title;
         this.options = this.currentQuestion.options;
         if (this.options.length > 0) {
-          this.options.forEach(option => {
-            this.optionsFormGroup.addControl(option.id, new FormControl(''));
-            this.optionsFormGroup.patchValue({[option.id]: option.title});
-            this.questionFormGroup.patchValue({title: this.title});
-          });
+          this.fillFormValues(this.options);
         }
       }
     }
     this.intervalSubscription =
       this.interval$.subscribe(() => {
-        let outputQuestion;
         const optionsObject = this.questionFormGroup.value.options;
         if (Object.keys(optionsObject).length > 0 || this.currentQuestion.type === 'Text') {
-          if (this.currentQuestion.type === 'Text') {
-            outputQuestion = {
-              id: this.currentQuestion.id,
-              title: this.questionFormGroup.value.title,
-              options: [{id: 1, title: ''}],
-              type: this.currentQuestion.type
-            };
-          } else {
-            const optionsArray = [];
-            for (const key in optionsObject) {
-              if (optionsObject.hasOwnProperty(key)) {
-                optionsArray.push({id: key, title: optionsObject[key]});
-              }
-            }
-            outputQuestion = {
-              id: this.currentQuestion.id,
-              title: this.questionFormGroup.value.title,
-              options: optionsArray,
-              type: this.currentQuestion.type
-            };
-          }
+          const outputQuestion = this.formQuestionToEmit(optionsObject);
           this.questionData.emit(outputQuestion);
         }
       });
@@ -81,6 +56,37 @@ export class CreateQuestionComponent implements OnInit, OnDestroy {
     this.intervalSubscription.unsubscribe();
   }
 
+  fillFormValues(options): void {
+    options.forEach(option => {
+      this.optionsFormGroup.addControl(option.id, new FormControl(''));
+      this.optionsFormGroup.patchValue({[option.id]: option.title});
+      this.questionFormGroup.patchValue({title: this.title});
+    });
+  }
+
+  formQuestionToEmit(optionsObject) {
+    if (this.currentQuestion.type === 'Text') {
+      return {
+        id: this.currentQuestion.id,
+        title: this.questionFormGroup.value.title,
+        options: [{id: 1, title: ''}],
+        type: this.currentQuestion.type
+      };
+    } else {
+      const optionsArray = [];
+      for (const key in optionsObject) {
+        if (optionsObject.hasOwnProperty(key)) {
+          optionsArray.push({id: key, title: optionsObject[key]});
+        }
+      }
+      return {
+        id: this.currentQuestion.id,
+        title: this.questionFormGroup.value.title,
+        options: optionsArray,
+        type: this.currentQuestion.type
+      };
+    }
+  }
   addOption(): void {
     const currentOption = this.questionService.addOption(this.options);
     this.options.push(currentOption);
@@ -104,6 +110,7 @@ export class CreateQuestionComponent implements OnInit, OnDestroy {
       return this.imgForText;
     }
   }
+
   checkAddOptionAvailability(question) {
     if (question.type === 'Text' && (!question.hasOwnProperty('options'))) {
       this.addOption();

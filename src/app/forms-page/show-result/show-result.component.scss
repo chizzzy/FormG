@@ -1,0 +1,50 @@
+@import "../../../assets/variables";
+.questions-section {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80vw;
+  box-shadow: 0 0 11px rgba(0, 0, 0, .12);
+  background-color: #fff;
+  height: auto;
+  margin-bottom: 50px;
+}
+
+.question {
+  display: flex;
+  margin-top: 40px;
+}
+
+.questions {
+  display: flex;
+  flex-direction: column;
+}
+.chart {
+  margin-top: 30px;
+  margin-left: 15px;
+}
+hr {
+  width: 60vw;
+  opacity: 0.3;
+  background-color: #EAEAEA;
+}
+.mat-raised-button.mat-primary {
+  background-color: $darkblue;
+  font-size: 16px;
+  margin-top: 30px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+  align-self: flex-start;
+}
+.question-title {
+  font-size: 19px;
+  white-space: normal;
+}

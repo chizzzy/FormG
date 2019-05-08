@@ -23,7 +23,6 @@ export class PollsListService {
     let poll;
     poll = {id: this.pollsService.generateId()};
     polls.push(poll);
-    localStorage.setItem('poll', JSON.stringify(polls));
     this.pollDataSubject.next(poll);
   }
 

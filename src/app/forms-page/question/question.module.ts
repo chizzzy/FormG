@@ -15,6 +15,8 @@ import {VoteFormComponent} from './components/vote-form/vote-form.component';
 import {FormErrorPageComponent} from '../views/form-error-page/form-error-page.component';
 import {VoteQuestionComponent} from './components/vote-question/vote-question.component';
 import {SuccessfulVotingComponent} from '../views/successful-voting/successful-voting.component';
+import {ShowResultComponent} from '../show-result/show-result.component';
+import {PieChartComponent} from '../views/pie-chart/pie-chart.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import {SuccessfulVotingComponent} from '../views/successful-voting/successful-v
     VoteFormComponent,
     FormErrorPageComponent,
     VoteQuestionComponent,
-    SuccessfulVotingComponent
+    SuccessfulVotingComponent,
+    ShowResultComponent,
+    PieChartComponent
   ],
   imports: [
     CommonModule,
