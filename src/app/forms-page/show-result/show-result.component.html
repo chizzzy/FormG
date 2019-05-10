@@ -8,11 +8,11 @@
         </div>
         <div *ngIf="question.type === 'Text'" class="question-text">
           <span class="question-title">{{i + 1}}. {{question.title}}</span>
-          <button mat-raised-button color="primary" (click)="showAnswers()">Show answers</button>
+          <button mat-raised-button color="primary" (click)="toggleAnswersButton()">{{answersButtonName}}</button>
           <div *ngIf="areAnswersShown" class="answers-block">
             <ul class="answers">
               <li *ngFor="let answer of question.answers; let i = index" class="answer">
-                <span>{{i + 1}}. {{answer[1] || '-'}} </span>
+                <span class="option-text">{{i + 1}}. {{answer[1] || '-'}} </span>
               </li>
             </ul>
           </div>

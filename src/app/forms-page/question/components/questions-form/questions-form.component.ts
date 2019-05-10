@@ -98,7 +98,6 @@ export class QuestionsFormComponent implements OnInit, OnDestroy {
     };
     if (updatedPoll.hasOwnProperty('questions')) {
       this.pollData = updatedPoll;
-      console.log(updatedPoll);
       this.pollsService.updatePollData(updatedPoll).subscribe();
     }
   }

@@ -11,7 +11,7 @@ import pieChartOptions from '../../../shared/pie-chart-options'
 export class PieChartComponent implements OnInit {
   @Input() question;
   public availableColors = ['rgba(255,0,0,0.3)', 'rgba(0,255,0,0.3)', 'rgba(0,0,255,0.3)', 'rgba(255,55,0.3)', 'rgba(255,0,55,0.3)',
-    'rgba(55,255,0,0.3)', 'rgba(55,255,55,0.3)', 'rgba(30,255,30,0.3)']
+    'rgba(55,255,0,0.3)', 'rgba(55,255,55,0.3)', 'rgba(30,255,30,0.3)'];
   public pieChartOptions = pieChartOptions;
   public pieChartLabels: Label[] = [];
   public pieChartData: number[] = [];
