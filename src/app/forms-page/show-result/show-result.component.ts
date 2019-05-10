@@ -28,21 +28,24 @@ export class ShowResultComponent implements OnInit {
           answerData = response[0][0].answers;
           questions = response[1][0].questions;
         }
-        questions.forEach(question => {
-          const answers = [];
-          answerData.forEach(answer => {
-            for (const key in answer) {
-              if (key == question.id) {
-                answers.push(answer[key]);
-              }
-            }
-          });
-          question.answers = answers;
-        });
-        this.questionsData = questions;
+        this.questionsData = this.groupQuestionsAndAnswers(questions, answerData);
         this.isLoaded = true;
       });
     }
+  }
+  groupQuestionsAndAnswers(questions, answerData) {
+    questions.forEach(question => {
+      const answers = [];
+      answerData.forEach(answer => {
+        for (const key in answer) {
+          if (key == question.id) {
+            answers.push(answer[key]);
+          }
+        }
+      });
+      question.answers = answers;
+    });
+    return questions;
   }
   toggleAnswersButton() {
     this.areAnswersShown = !this.areAnswersShown;
