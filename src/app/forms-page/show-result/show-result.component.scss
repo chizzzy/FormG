@@ -23,10 +23,12 @@
 }
 
 .questions {
+  margin-left: 30px;
   display: flex;
   flex-direction: column;
 }
 .chart {
+  flex: 2 2;
   margin-top: 30px;
   margin-left: 15px;
 }
@@ -45,6 +47,12 @@ hr {
   align-self: flex-start;
 }
 .question-title {
+  flex: 1 1;
   font-size: 19px;
   white-space: normal;
+}
+.question-text {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
 }

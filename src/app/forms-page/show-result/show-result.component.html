@@ -1,21 +1,24 @@
 <div class="questions-section">
   <div *ngIf="isLoaded" class="form">
-    <ul *ngFor="let question of questionsData; let i = index" class="questions">
-      <li class="question">
-      <span class="question-title">{{i+1}}. {{question.title}}</span>
-      <app-pie-chart class="chart" [question]="question" *ngIf="question.type !== 'Text'"></app-pie-chart>
-      <div *ngIf="question.type === 'Text'" class="question-text">
-        <button mat-raised-button color="primary" (click)="showAnswers()">Show answers</button>
-        <div *ngIf="areAnswersShown" class="answers-block">
-          <ul *ngFor="let answer of question.answers; let i = index" class="answers">
-            <li class="answer">
-              <span>{{i+1}}. {{answer[1] || '-'}} </span>
-            </li>
-          </ul>
+    <ul  class="questions">
+      <li *ngFor="let question of questionsData; let i = index">
+        <div class="question" *ngIf="question.type !== 'Text'">
+          <span class="question-title">{{i + 1}}. {{question.title}}</span>
+          <app-pie-chart class="chart" [question]="question"></app-pie-chart>
         </div>
-      </div>
+        <div *ngIf="question.type === 'Text'" class="question-text">
+          <span class="question-title">{{i + 1}}. {{question.title}}</span>
+          <button mat-raised-button color="primary" (click)="showAnswers()">Show answers</button>
+          <div *ngIf="areAnswersShown" class="answers-block">
+            <ul class="answers">
+              <li *ngFor="let answer of question.answers; let i = index" class="answer">
+                <span>{{i + 1}}. {{answer[1] || '-'}} </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <hr>
       </li>
-      <hr>
     </ul>
   </div>
 </div>
